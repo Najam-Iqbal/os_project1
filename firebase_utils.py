@@ -4,7 +4,8 @@ import json
 from firebase_admin import credentials, initialize_app
 
 # Convert secrets to dict and save to temp file
-firebase_secrets = st.secrets["firebase"]
+firebase_secrets = dict(st.secrets["firebase"])
+
 with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
     json.dump(firebase_secrets, tmp)
     tmp.flush()
