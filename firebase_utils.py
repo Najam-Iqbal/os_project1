@@ -1,7 +1,7 @@
 import streamlit as st
 import tempfile
 import json
-from firebase_admin import credentials, initialize_app
+from firebase_admin import credentials, initialize_app, db
 
 # Convert secrets to dict and save to temp file
 firebase_secrets = dict(st.secrets["firebase"])
