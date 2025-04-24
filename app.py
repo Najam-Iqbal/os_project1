@@ -23,11 +23,13 @@ def login():
             st.error("Invalid credentials")
 
 def show_power_status():
-    power_on = get_power_status()
-    if power_on:
-        st.info("🔌 Power Status: ON")
-    else:
-        st.warning("⚡ Power Status: OFF")
+    if st.button("🔍 View Current Power Status"):
+        power_on = get_power_status()
+        if power_on:
+            st.info("🔌 Power Status: ON")
+        else:
+            st.warning("⚡ Power Status: OFF")
+
 
 def main():
     if 'logged_in' not in st.session_state or not st.session_state.logged_in:
