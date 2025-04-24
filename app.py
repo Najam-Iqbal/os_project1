@@ -1,5 +1,6 @@
 ﻿import streamlit as st
 from firebase_utils import validate_login, get_power_status
+from status_monitor import show_status_in_app
 import importlib
 
 PAGES = {
@@ -23,11 +24,7 @@ def login():
             st.error("Invalid credentials")
 
 def show_power_status():
-    power_on = get_power_status()
-    if power_on:
-        st.info("🔌 Power Status: ON")
-    else:
-        st.warning("⚡ Power Status: OFF")
+    show_status_in_app()
 
 def main():
     if 'logged_in' not in st.session_state or not st.session_state.logged_in:
