@@ -1,5 +1,6 @@
 import streamlit as st
 from firebase_utils import validate_login, get_power_status, check_wifi_status
+from status_monitor import show_power_status
 import importlib
 import time
 
