@@ -14,15 +14,6 @@ def run():
         st.error("Device is not connected to WiFi.")
         st.stop()"""
 
-    # Show power status
-    try:
-        if get_power_status():
-            st.info("🔌 Power Status: ON")
-        else:
-            st.warning("⚡ Power Status: OFF")
-    except:
-        st.error("Unable to fetch power status due to WiFi issue.")
-
     # Main page starts here
     option = st.radio("Select what you want to change:", ["Change Username & Password", "Change WiFi"], key="change_option")
 
