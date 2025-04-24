@@ -49,16 +49,17 @@ def run():
         ssid = st.text_input("New WiFi SSID")
         wifi_pass = st.text_input("New WiFi Password", type="password")
         if st.button("Apply Changes", key="wifi_change"):
-            if ssid and wifi_pass:
-                update_value("Wifi_configure/SSID", ssid)
-                update_value("Wifi_configure/Password", wifi_pass)
-                update_value("Wifi_configure/chg", True)
-                st.spinner('Cheking the connection.........')
-                time.sleep(10)
+         if ssid and wifi_pass:
+            update_value("Wifi_configure/SSID", ssid)
+            update_value("Wifi_configure/Password", wifi_pass)
+            update_value("Wifi_configure/chg", True)
+
+            with st.spinner('🔄 Checking the connection...'):
+                time.sleep(10)  # simulate wait while ESP tries to reconnect
                 if get_value("Wifi_configure/sr"):
-                    st.success("WiFi credentials updated successfully.")
+                    st.success("✅ WiFi credentials updated successfully.")
                     update_value("Wifi_configure/sr", False)
                 else:
-                    st.error("Error updating WiFi credentials.")
-            else:
-                st.warning("Both SSID and Password are required.")
+                    st.error("❌ Error updating WiFi credentials.")
+         else:
+            st.warning("⚠️ Both SSID and Password are required.")
