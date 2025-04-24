@@ -97,7 +97,7 @@ def update_value(path, value, device_id="Device_001"):
         st.error(f"Failed to update Firebase: {e}")
         return False
 
-def show_power_status():
+def get_power_status():
     if "show_power" not in st.session_state:
         st.session_state.show_power = False
         st.session_state.power_checked_at = None
