@@ -14,14 +14,6 @@ def run():
         st.error("Device is not connected to WiFi.")
         st.stop()"""
 
-    # Show power status
-    try:
-        if get_power_status():
-            st.info("🔌 Power Status: ON")
-        else:
-            st.warning("⚡ Power Status: OFF")
-    except:
-        st.error("Unable to fetch power status due to WiFi issue.")
 
     # Manual mode control UI
     mode = st.radio("Select Manual Control Mode", ["Use Manual Control", "Exit Manual Control"], key="manual_mode")
