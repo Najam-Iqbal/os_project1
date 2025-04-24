@@ -53,7 +53,8 @@ def run():
                 update_value("Wifi_configure/SSID", ssid)
                 update_value("Wifi_configure/Password", wifi_pass)
                 update_value("Wifi_configure/chg", True)
-                time.sleep(3)
+                st.spinner('Cheking the connection.........')
+                time.sleep(10)
                 if get_value("Wifi_configure/sr"):
                     st.success("WiFi credentials updated successfully.")
                     update_value("Wifi_configure/sr", False)
