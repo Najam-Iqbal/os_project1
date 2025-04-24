@@ -7,14 +7,6 @@ from timetable_parser import csv_to_timetable_string
 def run():
     st.title("📅 Upload Timetable")
 
-    # Power status
-    try:
-        if get_power_status():
-            st.info("🔌 Power Status: ON")
-        else:
-            st.warning("⚡ Power Status: OFF")
-    except:
-        st.error("Unable to fetch power status due to WiFi issue.")
 
     st.info("⚠️ Strictly follow the given format before uploading timetable.")
 
