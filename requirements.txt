@@ -1,4 +1,3 @@
 streamlit
-pyrebase
 firebase_admin
-requests
+streamlit_autorefresh
