@@ -14,15 +14,6 @@ def run():
         st.error("Device is not connected to WiFi.")
         st.stop()"""
 
-    # Power status
-    try:
-        if get_power_status():
-            st.info("🔌 Power Status: ON")
-        else:
-            st.warning("⚡ Power Status: OFF")
-    except:
-        st.error("Unable to fetch power status due to WiFi issue.")
-
     # Deep sleep state tracking
     ds_time_key = "deep_sleep_minutes"
     if ds_time_key not in st.session_state:
