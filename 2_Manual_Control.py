@@ -37,6 +37,7 @@ def run():
 
     elif mode == "Exit Manual Control":
         if st.button("Exit Manual Control", key="exit_manual"):
+           with st.spinner('🔄 Exiting...'): 
             update_value("led/manualcontrol", False)
             st.info("Implementing......")
             time.sleep(3)
