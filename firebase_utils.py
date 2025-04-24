@@ -1,9 +1,10 @@
 import streamlit as st
 import firebase_admin
-from firebase_admin import credentials, initialize_app
+from firebase_admin import credentials, initialize_app, db  # ✅ Added db here
 import json
 import tempfile
 
+# === Initialize Firebase ===
 try:
     firebase_admin.get_app()
     st.success("Firebase already initialized")
@@ -11,21 +12,21 @@ except ValueError:
     try:
         st.info("Initializing Firebase...")
 
-        # Convert secrets to dict
+        # Extract secrets from st.secrets and write to a temporary file
         firebase_secrets = dict(st.secrets["firebase"])
 
-        # Write secrets to a temporary JSON file
         with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
+            # Write the secrets as a proper JSON file
             json.dump(firebase_secrets, tmp)
-            tmp.flush()
+            tmp.flush()  # Ensures data is written to disk
             cred = credentials.Certificate(tmp.name)
 
-        # Initialize Firebase app
+        # Initialize Firebase app with RTDB URL
         initialize_app(cred, {
             'databaseURL': 'https://esp-os-project-74989-default-rtdb.firebaseio.com/'
         })
 
-        st.success("Firebase Initialized")
+        st.success("✅ Firebase Initialized")
 
     except Exception as e:
         st.error(f"Firebase init error: {e}")
@@ -64,11 +65,12 @@ def update_value(path, value, device_id="Device_001"):
     except Exception as e:
         st.error(f"Failed to update Firebase: {e}")
         return False
+
 def get_power_status():
     try:
         ref = db.reference("Device_001/led/state")
         state = ref.get()
         return state == 1
     except Exception as e:
-        print("Error reading power status:", e)
+        st.error(f"Error reading power status: {e}")
         return False
