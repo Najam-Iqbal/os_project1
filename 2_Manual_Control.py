@@ -30,9 +30,9 @@ def run():
         delay_min = st.number_input("Enter time in minutes:", min_value=1, step=1)
         led_state = st.selectbox("Turn:", ["on", "off"], key="led_state_choice")
         if st.button("Submit Manual Command"):
+            update_value("led/delay", delay_min)
             update_value("led/manualcontrol", True)
             update_value("led/state", 1 if led_state == "on" else 0)
-            update_value("led/delay", delay_min)
             st.success("Manual control command sent.")
 
     elif mode == "Exit Manual Control":
