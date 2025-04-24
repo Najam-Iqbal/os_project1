@@ -34,35 +34,38 @@ except ValueError:
 # === Firebase Read and Write Functions ===
 
 def check_wifi_status():
-    if "show_wifi_status" not in st.session_state:
-        st.session_state.show_wifi_status = False
-        st.session_state.wifi_checked_at = None
+    if "wifi_check_started" not in st.session_state:
+        st.session_state.wifi_check_started = False
         st.session_state.wifi_prev_value = None
         st.session_state.wifi_result = ""
+        st.session_state.wifi_check_time = None
 
     if st.button("📶 Check WiFi Status"):
-        st.session_state.show_wifi_status = True
-        st.session_state.wifi_checked_at = time.time()
+        # Begin checking process
+        st.session_state.wifi_check_started = True
+        st.session_state.wifi_check_time = time.time()
 
-        # Get initial value
-        prev = get_value("wifi_status")
-        st.session_state.wifi_prev_value = prev
-
+        # Step 1: Get initial status
+        st.session_state.wifi_prev_value = get_value("wifi_status")
         with st.spinner("🔄 Checking WiFi connectivity... please wait 5 seconds"):
             time.sleep(5)
-            new = get_value("wifi_status")
+        new_value = get_value("wifi_status")
 
-        if new != prev:
+        # Step 2: Compare and store result
+        if new_value != st.session_state.wifi_prev_value:
             st.session_state.wifi_result = "✅ Device connected to the internet."
         else:
             st.session_state.wifi_result = "❌ No internet connection."
 
-    if st.session_state.show_wifi_status:
-        st.info(st.session_state.wifi_result)
+        st.session_state.wifi_check_time = time.time()
 
-        if time.time() - st.session_state.wifi_checked_at > 3:
-            st.session_state.show_wifi_status = False
-            st.experimental_rerun()
+    # Display result only if within 3 seconds
+    if st.session_state.wifi_check_started:
+        elapsed = time.time() - st.session_state.wifi_check_time
+        if elapsed < 3:
+            st.info(st.session_state.wifi_result)
+        else:
+            st.session_state.wifi_check_started = False  # Hide after 3 seconds
 
 def get_device_credentials(device_id="Device_001"):
     try:
