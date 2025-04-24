@@ -19,7 +19,7 @@ except ValueError:
         
         # Initialize Firebase app if not already initialized
         initialize_app(cred, {
-            'databaseURL': 'https://esp-os-project-74989-default-rtdb.firebaseio.com'
+            'databaseURL': 'https://esp-os-project-74989-default-rtdb.firebaseio.com/'
         })
         st.success("Firebase Initialized")
 
