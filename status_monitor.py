@@ -1,9 +1,13 @@
+from streamlit_autorefresh import st_autorefresh
 import streamlit as st
 import time
-import threading
-from firebase_utils import get_value, get_power_status
+from firebase_utils import get_power_status
 
 def show_power_status():
+    # Auto-refresh every second if needed
+    if "show_power" in st.session_state and st.session_state.show_power:
+        st_autorefresh(interval=1000, key="power_refresh")
+
     if "show_power" not in st.session_state:
         st.session_state.show_power = False
         st.session_state.power_checked_at = None
@@ -15,7 +19,7 @@ def show_power_status():
         st.session_state.show_power = True
         st.session_state.power_checked_at = time.time()
 
-    # Show the result for 3 seconds after button press
+    # Show the result and auto-hide after 3 seconds
     if st.session_state.show_power:
         elapsed = time.time() - st.session_state.power_checked_at
         if elapsed < 3:
@@ -24,4 +28,4 @@ def show_power_status():
             else:
                 st.warning(st.session_state.power_result)
         else:
-            st.session_state.show_power = False  # auto-hide
+            st.session_state.show_power = False  # Hide after 3 seconds
