@@ -33,6 +33,37 @@ except ValueError:
 
 # === Firebase Read and Write Functions ===
 
+def check_wifi_status():
+    if "show_wifi_status" not in st.session_state:
+        st.session_state.show_wifi_status = False
+        st.session_state.wifi_checked_at = None
+        st.session_state.wifi_prev_value = None
+        st.session_state.wifi_result = ""
+
+    if st.button("📶 Check WiFi Status"):
+        st.session_state.show_wifi_status = True
+        st.session_state.wifi_checked_at = time.time()
+
+        # Get initial value
+        prev = get_value("wifi_status")
+        st.session_state.wifi_prev_value = prev
+
+        with st.spinner("🔄 Checking WiFi connectivity... please wait 5 seconds"):
+            time.sleep(5)
+            new = get_value("wifi_status")
+
+        if new != prev:
+            st.session_state.wifi_result = "✅ Device connected to the internet."
+        else:
+            st.session_state.wifi_result = "❌ No internet connection."
+
+    if st.session_state.show_wifi_status:
+        st.info(st.session_state.wifi_result)
+
+        if time.time() - st.session_state.wifi_checked_at > 3:
+            st.session_state.show_wifi_status = False
+            st.experimental_rerun()
+
 def get_device_credentials(device_id="Device_001"):
     try:
         ref = db.reference(f"{device_id}/Esp32_configure")
