@@ -10,7 +10,7 @@ try:
 except ValueError:
     # If no app is initialized, initialize it
     firebase_secrets = dict(st.secrets["firebase"])
-
+    firebase_secrets["private_key"] = firebase_secrets["private_key"].replace("\\n", "\n")
     # Save secrets to a temporary file
     with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
         json.dump(firebase_secrets, tmp)
