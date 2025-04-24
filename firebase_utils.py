@@ -106,7 +106,6 @@ def get_power_status():
     except Exception as e:
         print("Error reading power status:", e)
         return False
-
 def show_power_status():
     if "show_power" not in st.session_state:
         st.session_state.show_power = False
@@ -128,3 +127,4 @@ def show_power_status():
         if time.time() - st.session_state.power_checked_at > 3:
             st.session_state.show_power = False
             st.experimental_rerun()
+
