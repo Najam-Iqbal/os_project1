@@ -54,10 +54,10 @@ def check_wifi_status():
         # Step 2: Compare and store result
         if new_value != st.session_state.wifi_prev_value:
             st.session_state.wifi_result = "✅ Device connected to the internet."
-            return True
+            #return True
         else:
             st.session_state.wifi_result = "❌ Device Not Connected to Wi-Fi."
-            return False
+            #return False
 
         st.session_state.wifi_check_time = time.time()
 
