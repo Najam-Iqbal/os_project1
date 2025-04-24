@@ -10,7 +10,7 @@ try:
    # st.success("Firebase already initialized")
 except ValueError:
     try:
-        st.info("Initializing Firebase...")
+        #st.info("Initializing Firebase...")
 
         # Extract secrets from st.secrets and write to a temporary file
         firebase_secrets = dict(st.secrets["firebase"])
@@ -54,8 +54,10 @@ def check_wifi_status():
         # Step 2: Compare and store result
         if new_value != st.session_state.wifi_prev_value:
             st.session_state.wifi_result = "✅ Device connected to the internet."
+            return true
         else:
             st.session_state.wifi_result = "❌ Device Not Connected to Wi-Fi."
+            return false
 
         st.session_state.wifi_check_time = time.time()
 
