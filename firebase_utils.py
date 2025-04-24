@@ -185,7 +185,9 @@ if device_name and password:
 # Example: Toggle power status
 if st.button("Toggle Power"):
     current_status = get_power_status()
-    success = update_value("led/state", current_status ? 0 : 1)  # Toggle the value
+    # Python ternary syntax: value_if_true if condition else value_if_false
+    new_value = 0 if current_status else 1
+    success = update_value("led/state", new_value)  # Fixed line
     if success:
         st.success("Power status updated!")
     else:
