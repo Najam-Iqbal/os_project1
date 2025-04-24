@@ -1,43 +1,38 @@
-import threading
-import time
+import streamlit as st
 import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import credentials, initialize_app, db  # ✅ Added db here
 import json
 import tempfile
-import streamlit as st
 
-# Global variable to store power status
-power_status = False
-
-# === Firebase Initialization ===
-def initialize_firebase():
+# === Initialize Firebase ===
+try:
+    firebase_admin.get_app()
+    st.success("Firebase already initialized")
+except ValueError:
     try:
-        firebase_admin.get_app()
-        st.success("Firebase already initialized")
-    except ValueError:
-        try:
-            st.info("Initializing Firebase...")
+        st.info("Initializing Firebase...")
 
-            # Extract secrets from st.secrets and write to a temporary file
-            firebase_secrets = dict(st.secrets["firebase"])
+        # Extract secrets from st.secrets and write to a temporary file
+        firebase_secrets = dict(st.secrets["firebase"])
 
-            with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
-                # Write the secrets as a proper JSON file
-                json.dump(firebase_secrets, tmp)
-                tmp.flush()  # Ensures data is written to disk
-                cred = credentials.Certificate(tmp.name)
+        with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
+            # Write the secrets as a proper JSON file
+            json.dump(firebase_secrets, tmp)
+            tmp.flush()  # Ensures data is written to disk
+            cred = credentials.Certificate(tmp.name)
 
-            # Initialize Firebase app with RTDB URL
-            firebase_admin.initialize_app(cred, {
-                'databaseURL': 'https://esp-os-project-74989-default-rtdb.firebaseio.com/'
-            })
+        # Initialize Firebase app with RTDB URL
+        initialize_app(cred, {
+            'databaseURL': 'https://esp-os-project-74989-default-rtdb.firebaseio.com/'
+        })
 
-            st.success("✅ Firebase Initialized")
+        st.success("✅ Firebase Initialized")
 
-        except Exception as e:
-            st.error(f"Firebase init error: {e}")
+    except Exception as e:
+        st.error(f"Firebase init error: {e}")
 
 # === Firebase Read and Write Functions ===
+
 def get_device_credentials(device_id="Device_001"):
     try:
         ref = db.reference(f"{device_id}/Esp32_configure")
@@ -71,24 +66,11 @@ def update_value(path, value, device_id="Device_001"):
         st.error(f"Failed to update Firebase: {e}")
         return False
 
-def fetch_power_status():
-    global power_status
-    while True:
-        try:
-            ref = db.reference("Device_001/led/state")
-            state = ref.get()
-            power_status = (state == 1)
-        except Exception as e:
-            st.error(f"Error reading power status: {e}")
-        time.sleep(5)  # Delay for 5 seconds before fetching again
-
 def get_power_status():
-    return power_status
-
-# Start the thread to fetch the power status continuously
-def start_power_status_thread():
-    threading.Thread(target=fetch_power_status, daemon=True).start()
-
-# Call this function once in the Streamlit app to start the background thread
-initialize_firebase()
-start_power_status_thread()
+    try:
+        ref = db.reference("Device_001/led/state")
+        state = ref.get()
+        return state == 1
+    except Exception as e:
+        st.error(f"Error reading power status: {e}")
+        return False
