@@ -1,5 +1,5 @@
 import streamlit as st
-from firebase_utils import validate_login, get_power_status, check_wifi_status
+from firebase_utils import validate_login, show_power_status, check_wifi_status
 import importlib
 
 PAGES = {
