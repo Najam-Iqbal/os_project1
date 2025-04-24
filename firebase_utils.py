@@ -7,7 +7,7 @@ import tempfile
 # === Initialize Firebase ===
 try:
     firebase_admin.get_app()
-    st.success("Firebase already initialized")
+   # st.success("Firebase already initialized")
 except ValueError:
     try:
         st.info("Initializing Firebase...")
@@ -26,7 +26,7 @@ except ValueError:
             'databaseURL': 'https://esp-os-project-74989-default-rtdb.firebaseio.com/'
         })
 
-        st.success("✅ Firebase Initialized")
+        #st.success("✅ Firebase Initialized")
 
     except Exception as e:
         st.error(f"Firebase init error: {e}")
