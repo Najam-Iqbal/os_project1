@@ -97,11 +97,24 @@ def update_value(path, value, device_id="Device_001"):
         st.error(f"Failed to update Firebase: {e}")
         return False
 
-def get_power_status():
-    try:
-        ref = db.reference("Device_001/led/state")
-        state = ref.get()
-        return state == 1
-    except Exception as e:
-        st.error(f"Error reading power status: {e}")
-        return False
+def show_power_status():
+    if "show_power" not in st.session_state:
+        st.session_state.show_power = False
+        st.session_state.power_checked_at = None
+
+    if st.button("🔍 View Current Power Status"):
+        st.session_state.show_power = True
+        st.session_state.power_checked_at = time.time()
+
+    # Display power status if flag is True
+    if st.session_state.show_power:
+        power_on = get_power_status()
+        if power_on:
+            st.info("🔌 Power Status: ON")
+        else:
+            st.warning("⚡ Power Status: OFF")
+
+        # Auto-hide after 3 seconds
+        if time.time() - st.session_state.power_checked_at > 3:
+            st.session_state.show_power = False
+            st.experimental_rerun()
