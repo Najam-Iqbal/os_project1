@@ -1,39 +1,35 @@
-﻿# status_monitor.py
-
 import streamlit as st
 import time
 import threading
 from firebase_utils import get_value, get_power_status
 
-# Function to monitor WiFi status from Firebase every 6 seconds
+# Monitor WiFi status
 def monitor_wifi_status():
     previous_status = None
-    
     while True:
         try:
-            # Get the current WiFi status from Firebase
-            current_status = get_value("Device_001/wifi_status")  # Adjust the path as needed
-            
-            # Check if the status has changed
+            current_status = get_value("Device_001/wifi_status")
             if current_status != previous_status:
-                if current_status == 1:
-                    st.session_state.wifi_connected = True
-                    st.session_state.last_wifi_status = current_status
-                else:
-                    st.session_state.wifi_connected = False
-                    st.session_state.last_wifi_status = current_status
-            # If the status has not changed, keep the last status
-            previous_status = current_status
+                st.session_state.wifi_connected = current_status == 1
+                st.session_state.last_wifi_status = current_status
+                previous_status = current_status
         except Exception as e:
-            # If there's an error, mark the device as offline
             st.session_state.wifi_connected = False
             st.session_state.last_wifi_status = None
             print(f"Error fetching WiFi status: {e}")
-
-        # Wait for 6 seconds before checking again
         time.sleep(6)
 
-# Function to start the Wi-Fi status monitoring thread
+# Monitor power status
+def monitor_power_status():
+    while True:
+        try:
+            st.session_state.power_on = get_power_status()
+        except Exception as e:
+            st.session_state.power_on = None
+            print(f"Error fetching power status: {e}")
+        time.sleep(6)
+
+# Start monitoring threads
 def start_status_threads():
     if "wifi_thread_started" not in st.session_state:
         st.session_state.last_wifi_status = None
@@ -41,34 +37,37 @@ def start_status_threads():
         threading.Thread(target=monitor_wifi_status, daemon=True).start()
         st.session_state.wifi_thread_started = True
 
-# Function to check if the WiFi is connected
+    if "power_thread_started" not in st.session_state:
+        st.session_state.power_on = None
+        threading.Thread(target=monitor_power_status, daemon=True).start()
+        st.session_state.power_thread_started = True
+
+# Check WiFi connection
 def is_wifi_connected():
     return st.session_state.get("wifi_connected", False)
 
-# Function to display the Wi-Fi and Power status
+# Display status
 def show_status_bar():
     cols = st.columns(2)
 
-    # WiFi Status
     if is_wifi_connected():
         cols[0].success("✅ WiFi Connected")
     else:
         cols[0].error("❌ WiFi Disconnected")
 
-    # Power Status (only shown if Wi-Fi is connected)
+    power_status = st.session_state.get("power_on", None)
+
     if is_wifi_connected():
-        try:
-            power_on = get_power_status()
-            if power_on:
-                cols[1].info("🔌 Power: ON")
-            else:
-                cols[1].warning("⚡ Power: OFF")
-        except Exception as e:
-            cols[1].error(f"⚠️ Error fetching power status: {e}")
+        if power_status is True:
+            cols[1].info("🔌 Power: ON")
+        elif power_status is False:
+            cols[1].warning("⚡ Power: OFF")
+        else:
+            cols[1].error("⚠️ Error fetching power status")
     else:
         cols[1].error("⚠️ Cannot fetch power status. Device is offline.")
 
-# Initialize the monitoring thread when the app starts
+# Run the app
 if __name__ == "__main__":
     st.title("Device Status Monitor")
     start_status_threads()
