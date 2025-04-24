@@ -22,15 +22,13 @@ def login():
         else:
             st.error("Invalid credentials")
 
-show_power_status()
-check_wifi_status()
-
 
 def main():
     if 'logged_in' not in st.session_state or not st.session_state.logged_in:
         login()
         st.stop()
-
+    show_power_status()
+    check_wifi_status()
     st.sidebar.title("ESP32 Firebase Dashboard")
 
     # Add a unique key to the radio button to prevent ID conflict
