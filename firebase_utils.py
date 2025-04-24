@@ -4,13 +4,13 @@ import json
 
 # Firebase configuration (replace with your actual config)
 firebase_config = {
-    apiKey: "AIzaSyCwkisRlf3qT2X2lSIezZ4IQSqsdI4-avo",
-    authDomain: "esp-os-project-74989.firebaseapp.com",
-    databaseURL: "https://esp-os-project-74989-default-rtdb.firebaseio.com",
-    projectId: "esp-os-project-74989",
-    storageBucket: "esp-os-project-74989.firebasestorage.app",
-    messagingSenderId: "24577304201",
-    appId: "1:24577304201:web:0848f6aabe8e4940a40858"
+    "apiKey": "AIzaSyCwkisRlf3qT2X2lSIezZ4IQSqsdI4-avo",
+    "authDomain": "esp-os-project-74989.firebaseapp.com",
+    "databaseURL": "https://esp-os-project-74989-default-rtdb.firebaseio.com",
+    "projectId": "esp-os-project-74989",
+    "storageBucket": "esp-os-project-74989.firebasestorage.app",
+    "messagingSenderId": "24577304201",
+    "appId": "1:24577304201:web:0848f6aabe8e4940a40858"
 }
 
 # JavaScript code with Firebase initialization and functions
