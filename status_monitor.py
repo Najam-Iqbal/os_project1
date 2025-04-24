@@ -67,6 +67,9 @@ def show_status_bar():
     else:
         cols[1].error("⚠️ Cannot fetch power status. Device is offline.")
 
+def show_status_in_app():
+        start_status_threads()
+        show_status_bar()
 # Run the app
 if __name__ == "__main__":
     st.title("Device Status Monitor")
