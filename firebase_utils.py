@@ -1,27 +1,34 @@
 import streamlit as st
-import tempfile
 import firebase_admin
+from firebase_admin import credentials, initialize_app
 import json
-from firebase_admin import credentials, initialize_app, db
+import tempfile
 
 try:
-    # Try getting the default app
     firebase_admin.get_app()
+    st.success("Firebase already initialized")
 except ValueError:
-    # If no app is initialized, initialize it
-    firebase_secrets = dict(st.secrets["firebase"])
-    firebase_secrets["private_key"] = firebase_secrets["private_key"].replace("\\n", "\n")
-    # Save secrets to a temporary file
-    with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
-        json.dump(firebase_secrets, tmp)
-        tmp.flush()
-        cred = credentials.Certificate(tmp.name)
-        
-        # Initialize Firebase app if not already initialized
+    try:
+        st.info("Initializing Firebase...")
+
+        # Convert secrets to dict
+        firebase_secrets = dict(st.secrets["firebase"])
+
+        # Write secrets to a temporary JSON file
+        with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
+            json.dump(firebase_secrets, tmp)
+            tmp.flush()
+            cred = credentials.Certificate(tmp.name)
+
+        # Initialize Firebase app
         initialize_app(cred, {
             'databaseURL': 'https://esp-os-project-74989-default-rtdb.firebaseio.com/'
         })
+
         st.success("Firebase Initialized")
+
+    except Exception as e:
+        st.error(f"Firebase init error: {e}")
 
 # === Firebase Read and Write Functions ===
 
