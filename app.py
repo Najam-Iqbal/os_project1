@@ -22,13 +22,8 @@ def login():
         else:
             st.error("Invalid credentials")
 
-def show_power_status():
-    if st.button("🔍 View Current Power Status"):
-        power_on = get_power_status()
-        if power_on:
-            st.info("🔌 Power Status: ON")
-        else:
-            st.warning("⚡ Power Status: OFF")
+show_power_status()
+check_wifi_status()
 
 
 def main():
