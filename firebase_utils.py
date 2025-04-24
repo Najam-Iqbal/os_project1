@@ -3,10 +3,11 @@ import tempfile
 import json
 from firebase_admin import credentials, initialize_app, db
 
+if not firebase_admin._apps:
 # Convert secrets to dict and save to temp file
-firebase_secrets = dict(st.secrets["firebase"])
+ firebase_secrets = dict(st.secrets["firebase"])
 
-with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
+ with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp:
     json.dump(firebase_secrets, tmp)
     tmp.flush()
     cred = credentials.Certificate(tmp.name)
@@ -14,7 +15,7 @@ with tempfile.NamedTemporaryFile(mode="w+", delete=False, suffix=".json") as tmp
         'databaseURL': 'https://your-project-id.firebaseio.com'
     })
 
-st.success("Firebase Initialized")
+ st.success("Firebase Initialized")
 
 # === Firebase Read and Write Functions ===
 
