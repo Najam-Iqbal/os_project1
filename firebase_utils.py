@@ -21,7 +21,7 @@ except ValueError:
         initialize_app(cred, {
             'databaseURL': 'https://esp-os-project-74989-default-rtdb.firebaseio.com'
         })
-    st.success("Firebase Initialized")
+        st.success("Firebase Initialized")
 
 # === Firebase Read and Write Functions ===
 
