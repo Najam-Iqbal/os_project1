@@ -30,7 +30,7 @@ def run():
         new_user = st.text_input("New Device Username")
         new_pass = st.text_input("New Device Password", type="password")
         if st.button("Apply Changes", key="cred_change"):
-            st.info("Changing......")
+          with st.spinner('🔄 Updating...'):
             if new_user and new_pass:
                 update_value("Esp32_configure/DeviceName", new_user)
                 update_value("Esp32_configure/Password", new_pass)
