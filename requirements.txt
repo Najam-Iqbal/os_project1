@@ -1,3 +1,4 @@
 streamlit
 pyrebase
 firebase_admin
+requests
