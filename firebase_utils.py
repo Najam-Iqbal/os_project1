@@ -1,5 +1,6 @@
 import streamlit as st
 import tempfile
+import firebase_admin
 import json
 from firebase_admin import credentials, initialize_app, db
 
