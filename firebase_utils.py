@@ -56,7 +56,7 @@ def check_wifi_status():
             st.session_state.wifi_result = "✅ Device connected to the internet. Click again to get current status"
             
         else:
-            st.session_state.wifi_result = "❌ Device Not Connected to Wi-Fi."
+            st.session_state.wifi_result = "❌ Device Not Connected to Wi-Fi. Click again to get current status"
             
 
     st.session_state.wifi_check_time = time.time()
