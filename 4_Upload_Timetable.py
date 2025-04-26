@@ -36,6 +36,7 @@ def run():
           if check_wifi():
             update_value("schedule_string", output)
             update_value("sch_update", True)
+            time.sleep(5)
             if get_value("sch_update")==False:
                 st.success("✅ Timetable uploaded successfully!")
                 # Remove temporary file
