@@ -34,6 +34,7 @@ def run():
         
         if "Error" not in output and all(day in output for day in required_days):
           if check_wifi():
+           with st.spinner('Processing...'):   
             update_value("schedule_string", output)
             update_value("sch_update", True)
             time.sleep(5)
