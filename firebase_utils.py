@@ -54,10 +54,10 @@ def check_wifi_status():
         # Step 2: Compare and store result
         if new_value != st.session_state.wifi_prev_value:
             st.session_state.wifi_result = "✅ Device connected to the internet."
-            return True
+            
         else:
             st.session_state.wifi_result = "❌ Device Not Connected to Wi-Fi."
-            return False
+            
 
         st.session_state.wifi_check_time = time.time()
 
@@ -68,6 +68,21 @@ def check_wifi_status():
             st.info(st.session_state.wifi_result)
         else:
             st.session_state.wifi_check_started = False  # Hide after 3 seconds
+
+def check_wifi() :
+    try:
+        ref = db.reference(f"{device_id}/wifi_status")
+        data = ref.get()
+        prevreading=data
+        time.sleep(1.2)
+        newreading=ref.get()
+        if prevreading!=newreading :
+            return True
+        else:
+            return False
+    except Exception as e:
+        st.error(f"Error fetching info {e}")
+        return None, None    
 
 def get_device_credentials(device_id="Device_001"):
     try:
