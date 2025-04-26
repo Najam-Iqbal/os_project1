@@ -53,7 +53,7 @@ def check_wifi_status():
 
         # Step 2: Compare and store result
         if new_value != st.session_state.wifi_prev_value:
-            st.session_state.wifi_result = "✅ Device connected to the internet."
+            st.session_state.wifi_result = "✅ Device connected to the internet. Click again to get current status"
             
         else:
             st.session_state.wifi_result = "❌ Device Not Connected to Wi-Fi."
