@@ -64,7 +64,7 @@ def check_wifi_status():
     # Display result only if within 3 seconds
     if st.session_state.wifi_check_started:
         elapsed = time.time() - st.session_state.wifi_check_time
-        if elapsed < 10:
+        if elapsed < 5:
             st.info(st.session_state.wifi_result)
         else:
             st.session_state.wifi_check_started = False  # Hide after 3 seconds"""
