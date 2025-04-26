@@ -2,3 +2,4 @@ streamlit
 firebase_admin
 streamlit_autorefresh
 pandas
+openpyxl
