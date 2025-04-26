@@ -33,15 +33,21 @@ def run():
         required_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         
         if "Error" not in output and all(day in output for day in required_days):
-            if update_value("schedule_string", output) and get_value("sch_update", output)==False:
+          if check_wifi():
+            if update_value("schedule_string", output) and get_value("sch_update")==False:
                 st.success("✅ Timetable uploaded successfully!")
                 # Remove temporary file
                 if os.path.exists(excel_path):
                     os.remove(excel_path)
             else:
                 st.error("❌ Failed to upload timetable to Firebase.")
+                update_value("sch_update", False)
+          else:
+              st.error("Devic is not connected to Wi-Fi.")
+              update_value("sch_update", False)
         else:
             st.error("❌ Incorrect timetable format. Make sure all days are included.")
+            update_value("sch_update", False)
         
         # Clean up temporary file
         if os.path.exists(excel_path):
