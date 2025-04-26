@@ -15,7 +15,7 @@ def show_power_status():
 
     if st.button("🔍 View Current Power Status"):
         power_on = get_power_status()
-        st.session_state.power_result = "🔌 Power Status: ON" if power_on else "⚡ Power Status: OFF"
+        st.session_state.power_result = "🔌 Power Status: ON (Click again to get current status)" if power_on else "⚡ Power Status: OFF (Click again to get current status)"
         st.session_state.show_power = True
         st.session_state.power_checked_at = time.time()
 
