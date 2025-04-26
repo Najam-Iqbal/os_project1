@@ -38,5 +38,4 @@ def run():
             st.success("Exited manual control.")
           else:
             st.error("Device is not connected to WiFi.")
-        else:
-            st.error("Device is not connected to WiFi.")
+       
