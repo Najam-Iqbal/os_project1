@@ -59,7 +59,7 @@ def check_wifi_status():
             st.session_state.wifi_result = "❌ Device Not Connected to Wi-Fi."
             
 
-        st.session_state.wifi_check_time = time.time()
+       """ st.session_state.wifi_check_time = time.time()
 
     # Display result only if within 3 seconds
     if st.session_state.wifi_check_started:
@@ -67,7 +67,7 @@ def check_wifi_status():
         if elapsed < 3:
             st.info(st.session_state.wifi_result)
         else:
-            st.session_state.wifi_check_started = False  # Hide after 3 seconds
+            st.session_state.wifi_check_started = False  # Hide after 3 seconds"""
 
 def check_wifi() :
     try:
