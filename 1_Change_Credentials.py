@@ -22,12 +22,13 @@ def run():
         new_pass = st.text_input("New Device Password", type="password")
         if st.button("Apply Changes", key="cred_change"):
           with st.spinner('🔄 Updating...'):
+           if check_wifi():   
             if new_user and new_pass:
                 update_value("Esp32_configure/DeviceName", new_user)
                 update_value("Esp32_configure/Password", new_pass)
                 update_value("Esp32_configure/chg", True)
                 time.sleep(5)
-                if get_value("Esp32_configure/sr") and check_wifi():
+                if get_value("Esp32_configure/sr"):
                     st.success("Username and Password updated successfully.")
                     update_value("Esp32_configure/sr", False)
                 else:
@@ -35,7 +36,8 @@ def run():
                     update_value("Esp32_configure/chg", False)
             else:
                 st.warning("Both fields are required.")
-
+           else:
+                st.error("Device is not connected to wifi.")
     elif option == "Change WiFi":
         ssid = st.text_input("New WiFi SSID")
         wifi_pass = st.text_input("New WiFi Password", type="password")
