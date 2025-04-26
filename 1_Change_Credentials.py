@@ -47,7 +47,7 @@ def run():
 
             with st.spinner('🔄 Checking the connection...'):
                 time.sleep(10)  # simulate wait while ESP tries to reconnect
-                if get_value("Wifi_configure/sr"):
+                if get_value("Wifi_configure/sr") and check_wifi():
                     st.success("✅ WiFi credentials updated successfully.")
                     update_value("Wifi_configure/sr", False)
                 else:
