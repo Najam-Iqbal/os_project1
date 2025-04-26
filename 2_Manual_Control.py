@@ -36,7 +36,7 @@ def run():
             update_value("led/manualcontrol", False)
             time.sleep(3)
             st.success("Exited manual control.")
-        else:
+          else:
             st.error("Device is not connected to WiFi.")
         else:
             st.error("Device is not connected to WiFi.")
