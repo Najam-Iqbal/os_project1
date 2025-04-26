@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import time
 import pandas as pd
-from firebase_utils import update_value, get_value, get_power_status
+from firebase_utils import update_value, get_value, get_power_status,check_wifi
 from timetable_parser import excel_to_timetable_string  # Renamed from csv_to_timetable_string
 
 def run():
