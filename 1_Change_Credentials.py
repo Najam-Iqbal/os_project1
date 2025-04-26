@@ -1,5 +1,5 @@
 import streamlit as st
-from firebase_utils import update_value, get_value, get_power_status
+from firebase_utils import update_value, get_value, get_power_status,check_wifi
 import time
 
 def run():
@@ -27,7 +27,7 @@ def run():
                 update_value("Esp32_configure/Password", new_pass)
                 update_value("Esp32_configure/chg", True)
                 time.sleep(5)
-                if get_value("Esp32_configure/sr"):
+                if get_value("Esp32_configure/sr") and check_wifi():
                     st.success("Username and Password updated successfully.")
                     update_value("Esp32_configure/sr", False)
                 else:
