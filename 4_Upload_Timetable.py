@@ -30,11 +30,10 @@ def run():
 
         # Parse and validate timetable string
         output = excel_to_timetable_string(excel_path)  # Changed function name
-        st.success(output)
         required_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         
         if "Error" not in output and all(day in output for day in required_days):
-            if update_value("schedule_string", output):
+            if update_value("schedule_string", output) and get_value("sch_update", output)==False:
                 st.success("✅ Timetable uploaded successfully!")
                 # Remove temporary file
                 if os.path.exists(excel_path):
