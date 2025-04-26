@@ -47,8 +47,8 @@ def check_wifi_status():
 
         # Step 1: Get initial status
         st.session_state.wifi_prev_value = get_value("wifi_status")
-        with st.spinner("🔄 Checking WiFi connectivity... please wait 5 seconds"):
-            time.sleep(5)
+        with st.spinner("🔄 Checking WiFi connectivity... please wait 2 seconds"):
+            time.sleep(2)
         new_value = get_value("wifi_status")
 
         # Step 2: Compare and store result
