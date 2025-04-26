@@ -1,6 +1,6 @@
 import pandas as pd
 
-def parse_schedule(file_path):
+def excel_to_timetable_string(file_path):
     try:
         # Read the Excel file
         df = pd.read_excel(file_path, sheet_name='Sheet1', header=0)
