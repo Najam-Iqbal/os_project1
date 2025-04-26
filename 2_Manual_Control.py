@@ -21,18 +21,22 @@ def run():
     if mode == "Use Manual Control":
         delay_min = st.number_input("Enter time in minutes:", min_value=1, step=1)
         led_state = st.selectbox("Turn:", ["on", "off"], key="led_state_choice")
-        if st.button("Submit Manual Command") and check_wifi():
+        if st.button("Submit Manual Command"):
+           if check_wifi(): 
             update_value("led/delay", delay_min)
             update_value("led/manualcontrol", True)
             update_value("led/state", 1 if led_state == "on" else 0)
             st.success("Manual control command sent.")
-        else:
+           else:
             st.error("Device is not connected to WiFi.")
     elif mode == "Exit Manual Control":
-        if st.button("Exit Manual Control", key="exit_manual") and check_wifi():
+        if st.button("Exit Manual Control", key="exit_manual"):
+          if check_wifi():  
            with st.spinner('🔄 Exiting...'): 
             update_value("led/manualcontrol", False)
             time.sleep(3)
             st.success("Exited manual control.")
+        else:
+            st.error("Device is not connected to WiFi.")
         else:
             st.error("Device is not connected to WiFi.")
