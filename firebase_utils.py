@@ -69,7 +69,7 @@ def check_wifi_status():
         else:
             st.session_state.wifi_check_started = False  # Hide after 3 seconds"""
 
-def check_wifi() :
+def check_wifi(device_id="Device_001") :
     try:
         ref = db.reference(f"{device_id}/wifi_status")
         data = ref.get()
