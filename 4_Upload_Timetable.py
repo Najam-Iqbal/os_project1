@@ -27,14 +27,16 @@ def run():
         excel_path = "temp_uploaded.xlsx"
         with open(excel_path, "wb") as f:
             f.write(uploaded.read())
-
+        
         # Parse and validate timetable string
         output = excel_to_timetable_string(excel_path)  # Changed function name
         required_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         
         if "Error" not in output and all(day in output for day in required_days):
           if check_wifi():
-            if update_value("schedule_string", output) and get_value("sch_update")==False:
+            update_value("schedule_string", output)
+            update_value("sch_update", True)
+            if get_value("sch_update")==False:
                 st.success("✅ Timetable uploaded successfully!")
                 # Remove temporary file
                 if os.path.exists(excel_path):
