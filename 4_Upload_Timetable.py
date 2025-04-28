@@ -11,7 +11,7 @@ def run():
     st.info("⚠️ Strictly follow the given format before uploading timetable. USE 24 HOURS FORMAT")
 
     # Sample XLSX download link (update this with your actual sample file)
-    sample_link = "https://onedrive.live.com/download?resid=DE99FF54DC50BB1A%21113&authkey=!EeSjj9GhO-BAk6Hf0Qu7hewB-X0dkVxH-Y5EEgkKNB70Cw"
+    sample_link = "https://1drv.ms/x/c/de99ff54dc50bb1a/EeSjj9GhO-BAk6Hf0Qu7hewBqoGlFljaquSCcuXm_2-KFA?e=ZDvR3C"
     st.markdown(f"[⬇️ Download Sample Timetable XLSX]({sample_link})", unsafe_allow_html=True)
 
     # Show sample image (if available)
