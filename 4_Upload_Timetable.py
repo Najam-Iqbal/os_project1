@@ -8,7 +8,7 @@ from timetable_parser import excel_to_timetable_string  # Renamed from csv_to_ti
 def run():
     st.title("📅 Upload Timetable")
 
-    st.info("⚠️ Strictly follow the given format before uploading timetable.")
+    st.info("⚠️ Strictly follow the given format before uploading timetable. USE 24 HOURS FORMAT")
 
     # Sample XLSX download link (update this with your actual sample file)
     sample_link = "https://drive.google.com/uc?export=download&id=f7d35f93ff7eafa52ab2a8d34fdf5696b9450670"
