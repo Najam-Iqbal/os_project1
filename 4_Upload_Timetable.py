@@ -11,7 +11,7 @@ def run():
     st.info("⚠️ Strictly follow the given format before uploading timetable.")
 
     # Sample XLSX download link (update this with your actual sample file)
-    sample_link = "https://drive.google.com/uc?export=download&id=YOUR_XLSX_FILE_ID"
+    sample_link = "https://drive.google.com/uc?export=download&id=f7d35f93ff7eafa52ab2a8d34fdf5696b9450670"
     st.markdown(f"[⬇️ Download Sample Timetable XLSX]({sample_link})", unsafe_allow_html=True)
 
     # Show sample image (if available)
