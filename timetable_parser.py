@@ -13,7 +13,6 @@ def excel_to_timetable_string(file_path):
             end_col = f"{day}-end"
             day_schedule = []
             
-            # Process time slots if columns exist
             if start_col in df.columns and end_col in df.columns:
                 time_pairs = df[[start_col, end_col]].dropna(how='all')
                 
@@ -21,14 +20,16 @@ def excel_to_timetable_string(file_path):
                     for _, row in time_pairs.iterrows():
                         for col, marker in [(start_col, '1'), (end_col, '0')]:
                             if pd.notna(row[col]):
-                                time_str = (row[col].strftime('%-I:%M') 
-                                          if hasattr(row[col], 'strftime') 
-                                          else str(row[col]).split()[0][:-3])
+                                # Format correctly
+                                if isinstance(row[col], pd.Timestamp):
+                                    time_str = row[col].strftime('%H:%M')
+                                else:
+                                    time_str = str(row[col]).strip()
                                 day_schedule.append(f"{time_str}={marker}")
                 else:
-                    day_schedule.append("1:00=0")
+                    day_schedule.append("01:00=0")
             else:
-                day_schedule.append("1:00=0")
+                day_schedule.append("01:00=0")
             
             output.append(f"{day}: {', '.join(day_schedule)}")
         
