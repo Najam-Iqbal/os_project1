@@ -2,6 +2,7 @@ import streamlit as st
 from firebase_utils import validate_login, get_power_status, check_wifi_status
 from status_monitor import show_power_status
 import importlib
+import time
 
 PAGES = {
     "LED Control": "2_Manual_Control",
@@ -10,72 +11,38 @@ PAGES = {
     "Upload Timetable": "4_Upload_Timetable"
 }
 
-def login_page():
+
+
+def login():
     st.title("Device Login")
-    
-    # Store credentials in session state for callback access
-    if 'login_device_name' not in st.session_state:
-        st.session_state.login_device_name = ""
-    if 'login_password' not in st.session_state:
-        st.session_state.login_password = ""
-    
-    # Form inputs that update session state
-    st.text_input(
-        "Enter Device Name",
-        key="login_device_name",
-        on_change=lambda: None  # Forces update
-    )
-    st.text_input(
-        "Enter Password",
-        type="password",
-        key="login_password",
-        on_change=lambda: None  # Forces update
-    )
-    
-    # Login button with callback
-    st.button(
-        "Login",
-        key="login_button",
-        on_click=on_login_click
-    )
+    device_name = st.text_input("Enter Device Name")
+    password = st.text_input("Enter Password", type="password")
+    login_clicked = st.button("Login")
 
-def on_login_click():
-    """Callback function for login button"""
-    if validate_login(
-        st.session_state.login_device_name,
-        st.session_state.login_password
-    ):
-        st.session_state.logged_in = True
-        st.session_state.device_name = st.session_state.login_device_name
-        st.rerun()  # Immediately refresh to show main app
-    else:
-        st.error("Invalid credentials")
+    if login_clicked:
+        if validate_login(device_name, password):
+            st.session_state.logged_in = True
+            st.success("Login successful!")
+        else:
+            st.error("Invalid credentials")
 
-def main_app():
+
+def main():
+    if 'logged_in' not in st.session_state or not st.session_state.logged_in:
+        login()
+        st.stop()
     st.sidebar.title("ESP32 Firebase Dashboard")
-    selection = st.sidebar.radio(
-        "Select Page",
-        list(PAGES.keys()),
-        key="page_selection_radio"
-    )
+    # Add a unique key to the radio button to prevent ID conflict
+    selection = st.sidebar.radio("Select Page", list(PAGES.keys()), key="page_selection_radio")
 
-    # Display status
+    # Display power status
     show_power_status()
     check_wifi_status()
     
-    # Load selected module
-    module = importlib.import_module(PAGES[selection])
+    # Dynamically load and run the selected module
+    module_name = PAGES[selection]
+    module = importlib.import_module(module_name)
     module.run()
-
-def main():
-    # Initialize session state
-    if 'logged_in' not in st.session_state:
-        st.session_state.logged_in = False
-    
-    if st.session_state.logged_in:
-        main_app()
-    else:
-        login_page()
 
 if __name__ == "__main__":
     main()
