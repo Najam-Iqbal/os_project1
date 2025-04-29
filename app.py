@@ -2,7 +2,6 @@ import streamlit as st
 from firebase_utils import validate_login, get_power_status, check_wifi_status
 from status_monitor import show_power_status
 import importlib
-import time
 
 PAGES = {
     "LED Control": "2_Manual_Control",
@@ -13,30 +12,59 @@ PAGES = {
 
 def login_page():
     st.title("Device Login")
-    device_name = st.text_input("Enter Device Name", key="login_device_name")
-    password = st.text_input("Enter Password", type="password", key="login_password")
     
-    if st.button("Login", key="login_button"):
-        with st.spinner("Authenticating..."):
-            if validate_login(device_name, password):
-                st.session_state.logged_in = True
-                st.session_state.device_name = device_name
-                # No need for success message, we'll redirect immediately
-                st.experimental_rerun()
-            else:
-                st.error("Invalid credentials")
+    # Store credentials in session state for callback access
+    if 'login_device_name' not in st.session_state:
+        st.session_state.login_device_name = ""
+    if 'login_password' not in st.session_state:
+        st.session_state.login_password = ""
+    
+    # Form inputs that update session state
+    st.text_input(
+        "Enter Device Name",
+        key="login_device_name",
+        on_change=lambda: None  # Forces update
+    )
+    st.text_input(
+        "Enter Password",
+        type="password",
+        key="login_password",
+        on_change=lambda: None  # Forces update
+    )
+    
+    # Login button with callback
+    st.button(
+        "Login",
+        key="login_button",
+        on_click=on_login_click
+    )
+
+def on_login_click():
+    """Callback function for login button"""
+    if validate_login(
+        st.session_state.login_device_name,
+        st.session_state.login_password
+    ):
+        st.session_state.logged_in = True
+        st.session_state.device_name = st.session_state.login_device_name
+        st.rerun()  # Immediately refresh to show main app
+    else:
+        st.error("Invalid credentials")
 
 def main_app():
     st.sidebar.title("ESP32 Firebase Dashboard")
-    selection = st.sidebar.radio("Select Page", list(PAGES.keys()), key="page_selection_radio")
+    selection = st.sidebar.radio(
+        "Select Page",
+        list(PAGES.keys()),
+        key="page_selection_radio"
+    )
 
-    # Display power status
+    # Display status
     show_power_status()
     check_wifi_status()
     
-    # Dynamically load and run the selected module
-    module_name = PAGES[selection]
-    module = importlib.import_module(module_name)
+    # Load selected module
+    module = importlib.import_module(PAGES[selection])
     module.run()
 
 def main():
