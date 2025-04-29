@@ -23,8 +23,10 @@ def login():
         if validate_login(device_name, password):
             st.session_state.logged_in = True
             st.success("Login successful!")
+            st.experimental_rerun()  # 🔁 Force re-run to access app
         else:
             st.error("Invalid credentials")
+
 
 
 def main():
