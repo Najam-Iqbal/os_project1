@@ -11,8 +11,6 @@ PAGES = {
     "Upload Timetable": "4_Upload_Timetable"
 }
 
-
-
 def login():
     st.title("Device Login")
     device_name = st.text_input("Enter Device Name")
@@ -21,36 +19,29 @@ def login():
 
     if login_clicked:
         if validate_login(device_name, password):
-            st.session_state.login_success = True  # Set a one-time flag
+            st.session_state.logged_in = True
+            st.success("Login successful!")
         else:
             st.error("Invalid credentials")
 
-    # After login success, set logged_in and rerun
-    if st.session_state.get("login_success"):
-        st.session_state.logged_in = True
-        del st.session_state["login_success"]  # Clear flag
-        st.experimental_rerun()  # Safe to call here
-
-
-
-
-
 def main():
-    if 'logged_in' not in st.session_state or not st.session_state.logged_in:
-        login()
-        st.stop()
-    st.sidebar.title("ESP32 Firebase Dashboard")
-    # Add a unique key to the radio button to prevent ID conflict
-    selection = st.sidebar.radio("Select Page", list(PAGES.keys()), key="page_selection_radio")
+    if 'logged_in' not in st.session_state:
+        st.session_state.logged_in = False
 
-    # Display power status
-    show_power_status()
-    check_wifi_status()
-    
-    # Dynamically load and run the selected module
-    module_name = PAGES[selection]
-    module = importlib.import_module(module_name)
-    module.run()
+    if not st.session_state.logged_in:
+        login()
+    else:
+        st.sidebar.title("ESP32 Firebase Dashboard")
+        selection = st.sidebar.radio("Select Page", list(PAGES.keys()), key="page_selection_radio")
+
+        # Display power status
+        show_power_status()
+        check_wifi_status()
+
+        # Dynamically load and run the selected module
+        module_name = PAGES[selection]
+        module = importlib.import_module(module_name)
+        module.run()
 
 if __name__ == "__main__":
     main()
