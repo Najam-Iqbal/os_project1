@@ -21,10 +21,16 @@ def login():
 
     if login_clicked:
         if validate_login(device_name, password):
-            st.session_state.logged_in = True
-            st.experimental_rerun()  # 🔁 Force re-run immediately
+            st.session_state.login_success = True  # Set a one-time flag
         else:
             st.error("Invalid credentials")
+
+    # After login success, set logged_in and rerun
+    if st.session_state.get("login_success"):
+        st.session_state.logged_in = True
+        del st.session_state["login_success"]  # Clear flag
+        st.experimental_rerun()  # Safe to call here
+
 
 
 
