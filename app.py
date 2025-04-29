@@ -11,30 +11,22 @@ PAGES = {
     "Upload Timetable": "4_Upload_Timetable"
 }
 
-def login():
+def login_page():
     st.title("Device Login")
-    device_name = st.text_input("Enter Device Name")
-    password = st.text_input("Enter Password", type="password")
-    login_clicked = st.button("Login")
-
-    if login_clicked:
-        if validate_login(device_name, password):
-            st.session_state.logged_in = True
-            st.session_state.device_name = device_name  # Store device name for later use
-            st.experimental_rerun()  # Force a rerun to immediately show the main app
-        else:
-            st.error("Invalid credentials")
-
-def main():
-    # Initialize session state variables if they don't exist
-    if 'logged_in' not in st.session_state:
-        st.session_state.logged_in = False
+    device_name = st.text_input("Enter Device Name", key="login_device_name")
+    password = st.text_input("Enter Password", type="password", key="login_password")
     
-    if not st.session_state.logged_in:
-        login()
-        st.stop()  # This will stop execution if not logged in
-    
-    # Only show the main app if logged in
+    if st.button("Login", key="login_button"):
+        with st.spinner("Authenticating..."):
+            if validate_login(device_name, password):
+                st.session_state.logged_in = True
+                st.session_state.device_name = device_name
+                # No need for success message, we'll redirect immediately
+                st.experimental_rerun()
+            else:
+                st.error("Invalid credentials")
+
+def main_app():
     st.sidebar.title("ESP32 Firebase Dashboard")
     selection = st.sidebar.radio("Select Page", list(PAGES.keys()), key="page_selection_radio")
 
@@ -46,6 +38,16 @@ def main():
     module_name = PAGES[selection]
     module = importlib.import_module(module_name)
     module.run()
+
+def main():
+    # Initialize session state
+    if 'logged_in' not in st.session_state:
+        st.session_state.logged_in = False
+    
+    if st.session_state.logged_in:
+        main_app()
+    else:
+        login_page()
 
 if __name__ == "__main__":
     main()
