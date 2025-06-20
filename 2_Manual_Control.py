@@ -26,7 +26,7 @@ def run():
            with st.spinner('Sending command...'):
             update_value("led/delay", delay_min)
             update_value("led/manualcontrol", True)
-            update_value("led/state", 1 if led_state == "on" else 0)
+            update_value("led/mn_st", 1 if led_state == "on" else 0)
             time.sleep(3)
             st.success("Manual control command sent.")
          else:
