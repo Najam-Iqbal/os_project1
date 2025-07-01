@@ -19,7 +19,7 @@ def run():
 
     if option == "Change Device name & Password":
         new_user = st.text_input("New Device name")
-        new_pass = st.text_input("New Device Password", type="password")
+        new_pass = st.text_input("New Device Password (8-15 characters)", type="password")
         if st.button("Apply Changes", key="cred_change"):
          if 8<= len(new_pass):
           with st.spinner('🔄 Updating...'):
