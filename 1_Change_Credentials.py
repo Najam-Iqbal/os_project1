@@ -17,10 +17,11 @@ def run():
     # Main page starts here
     option = st.radio("Select what you want to change:", ["Change Username & Password", "Change WiFi"], key="change_option")
 
-    if option == "Change Username & Password":
-        new_user = st.text_input("New Device Username")
+    if option == "Change Device name & Password":
+        new_user = st.text_input("New Device name")
         new_pass = st.text_input("New Device Password", type="password")
         if st.button("Apply Changes", key="cred_change"):
+         if 8<= len(new_pass):
           with st.spinner('🔄 Updating...'):
            if check_wifi():   
             if new_user and new_pass:
@@ -38,6 +39,8 @@ def run():
                 st.warning("Both fields are required.")
            else:
                 st.error("Device is not connected to wifi.")
+         else:
+              st.error("Password must be between 8-15 characters")
     elif option == "Change WiFi":
         ssid = st.text_input("New WiFi SSID")
         wifi_pass = st.text_input("New WiFi Password", type="password")
