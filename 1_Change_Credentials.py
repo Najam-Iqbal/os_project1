@@ -15,7 +15,7 @@ def run():
         st.stop()"""
 
     # Main page starts here
-    option = st.radio("Select what you want to change:", ["Change Username & Password", "Change WiFi"], key="change_option")
+    option = st.radio("Select what you want to change:", ["Change Device name & Password", "Change WiFi"], key="change_option")
 
     if option == "Change Device name & Password":
         new_user = st.text_input("New Device name")
