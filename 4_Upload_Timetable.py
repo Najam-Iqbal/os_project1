@@ -87,34 +87,23 @@ def run():
                 import re
                 import pandas as pd
 
-                # Step 1: Split into per-day entries
-                lines = re.split(r'(?=(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):)', timetable.strip())
-                lines = [''.join(lines[i:i+2]) for i in range(1, len(lines), 2)]
+                # ✅ Extract each day's block safely (no duplication)
+                pattern = r'(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):\s*([^MTWFSS]*)'
+                matches = re.findall(pattern, timetable)
 
-                # Debug: Show lines extracted
-                st.write("📄 Parsed Lines from Firebase:")
-                st.write(lines)
-
-                # Step 2: Parse each day
                 day_blocks = {}
-                for line in lines:
-                    if ":" in line:
-                        day, entries = line.split(":", 1)
-                        matches = re.findall(r'(\d{1,2}:\d{2}(?::\d{2})?)=(\d)', entries)
-                        times = []
-                        for time, state in matches:
-                            try:
-                                time_fmt = pd.to_datetime(time).strftime('%H:%M')  # Remove seconds
-                            except:
-                                time_fmt = time
-                            times.append((time_fmt, int(state)))
-                        day_blocks[day.strip()] = times
+                for day, data in matches:
+                    entries = re.findall(r'(\d{1,2}:\d{2}(?::\d{2})?)=(\d)', data)
+                    times = []
+                    for time, state in entries:
+                        try:
+                            time_fmt = pd.to_datetime(time).strftime('%H:%M')  # Drop seconds
+                        except:
+                            time_fmt = time
+                        times.append((time_fmt, int(state)))
+                    day_blocks[day] = times
 
-                # Debug: Show parsed ON/OFF times
-                st.write("🔍 Parsed ON/OFF States:")
-                st.write(day_blocks)
-
-                # Step 3: Convert ON/OFF pairs to start-end intervals
+                # 🧠 Convert to Start-End intervals
                 structured = {}
                 all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
                 for day in all_days:
@@ -128,14 +117,10 @@ def run():
                             ranges.append((current_start, time))
                             current_start = None
                     if current_start:
-                        ranges.append((current_start, '...'))  # Still ON
+                        ranges.append((current_start, '...'))
                     structured[day] = ranges
 
-                # Debug: Show structured start-end pairs
-                st.write("✅ Start-End Pairs:")
-                st.write(structured)
-
-                # Step 4: Normalize to make a proper table
+                # 📊 Normalize to make table
                 max_len = max(len(pairs) for pairs in structured.values())
                 for day in structured:
                     while len(structured[day]) < max_len:
@@ -161,6 +146,7 @@ def run():
                 st.warning("⚠️ No timetable currently stored.")
         except Exception as e:
             st.error(f"❌ Failed to fetch timetable: {str(e)}")
+
 
 
 
