@@ -87,7 +87,7 @@ def run():
                 import re
                 import pandas as pd
 
-                # Split into lines even if it's single-line
+                # 🔍 Handle both single-line and multiline format
                 lines = re.split(r'(?=(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):)', timetable.strip())
                 lines = [''.join(lines[i:i+2]) for i in range(1, len(lines), 2)]
 
@@ -99,16 +99,15 @@ def run():
                         times = []
                         for time, state in matches:
                             try:
-                                # Convert to HH:MM only
-                                time_fmt = pd.to_datetime(time).strftime('%H:%M')
+                                time_fmt = pd.to_datetime(time).strftime('%H:%M')  # 🕑 Drop seconds
                             except:
                                 time_fmt = time
                             times.append((time_fmt, int(state)))
                         day_blocks[day.strip()] = times
 
-                # Build start-end pairs
-                all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                # 🧠 Convert state sequences into (start, end) intervals
                 structured = {}
+                all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
                 for day in all_days:
                     entries = day_blocks.get(day, [])
                     ranges = []
@@ -120,16 +119,16 @@ def run():
                             ranges.append((current_start, time))
                             current_start = None
                     if current_start:
-                        ranges.append((current_start, '...'))
+                        ranges.append((current_start, '...'))  # still running
                     structured[day] = ranges
 
-                # Normalize row lengths
+                # 🔄 Normalize row length
                 max_len = max(len(v) for v in structured.values())
                 for day in structured:
                     while len(structured[day]) < max_len:
                         structured[day].append(('', ''))
 
-                # Create table
+                # 🧱 Create rows for DataFrame
                 rows = []
                 for day, pairs in structured.items():
                     flat = []
@@ -137,18 +136,21 @@ def run():
                         flat.extend([s, e])
                     rows.append([day] + flat)
 
-                # Column headers
+                # 🏷️ Column names
                 columns = ["Day"]
                 for i in range(1, max_len + 1):
                     columns += [f"Start {i}", f"End {i}"]
 
+                # 🧾 Final DataFrame
                 df = pd.DataFrame(rows, columns=columns)
 
+                # ✅ Display Table
                 st.dataframe(df, use_container_width=True)
 
             else:
                 st.warning("⚠️ No timetable currently stored.")
         except Exception as e:
             st.error(f"❌ Failed to fetch timetable: {str(e)}")
+
 
 
