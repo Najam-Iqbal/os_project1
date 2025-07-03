@@ -86,8 +86,9 @@ def run():
 
                 import re
                 import pandas as pd
+                from datetime import datetime
 
-                # ✅ Extract each day's block safely (no duplication)
+                # ✅ Step 1: Parse the timetable
                 pattern = r'(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):\s*([^MTWFSS]*)'
                 matches = re.findall(pattern, timetable)
 
@@ -97,13 +98,13 @@ def run():
                     times = []
                     for time, state in entries:
                         try:
-                            time_fmt = pd.to_datetime(time).strftime('%H:%M')  # Drop seconds
+                            time_fmt = pd.to_datetime(time).strftime('%H:%M')
                         except:
                             time_fmt = time
                         times.append((time_fmt, int(state)))
                     day_blocks[day] = times
 
-                # 🧠 Convert to Start-End intervals
+                # ✅ Step 2: Convert to start-end intervals
                 structured = {}
                 all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
                 for day in all_days:
@@ -120,8 +121,8 @@ def run():
                         ranges.append((current_start, '...'))
                     structured[day] = ranges
 
-                # 📊 Normalize to make table
-                max_len = max(len(pairs) for pairs in structured.values())
+                # ✅ Step 3: Normalize for table
+                max_len = max(len(v) for v in structured.values())
                 for day in structured:
                     while len(structured[day]) < max_len:
                         structured[day].append(('', ''))
@@ -139,13 +140,35 @@ def run():
 
                 df = pd.DataFrame(rows, columns=columns)
 
-                st.subheader("📊 Weekly Schedule Table")
-                st.dataframe(df, use_container_width=True)
+                # ✅ Step 4: Highlight today's row
+                today_name = datetime.now().strftime('%A')
+
+                def style_row(row):
+                    base_style = []
+                    if row['Day'] == today_name:
+                        base_style = ['background-color: #ffeaa7'] * len(row)
+                    else:
+                        base_style = [''] * len(row)
+
+                    # Add green/red to start/end
+                    for i, (col, val) in enumerate(zip(df.columns, row)):
+                        if col.startswith("Start") and val != "":
+                            base_style[i] += "; color: green; font-weight: bold"
+                        elif col.startswith("End") and val != "":
+                            base_style[i] += "; color: red; font-weight: bold"
+                    return base_style
+
+                styled_df = df.style.apply(style_row, axis=1)
+
+                # ✅ Display with styling
+                st.subheader(f"📊 Weekly Schedule Table (Today: {today_name})")
+                st.markdown(styled_df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
             else:
                 st.warning("⚠️ No timetable currently stored.")
         except Exception as e:
             st.error(f"❌ Failed to fetch timetable: {str(e)}")
+
 
 
 
