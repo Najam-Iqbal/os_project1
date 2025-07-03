@@ -140,9 +140,8 @@ def run():
                 df = pd.DataFrame(rows, columns=columns)
 
                 # ✅ Step 4: Highlight today's row
-                
-                 from zoneinfo import ZoneInfo
-                 today_name = datetime.now(ZoneInfo("Asia/Karachi")).strftime('%A')
+                from zoneinfo import ZoneInfo
+                today_name = datetime.now(ZoneInfo("Asia/Karachi")).strftime('%A')
 
                 def style_row(row):
                     base_style = []
