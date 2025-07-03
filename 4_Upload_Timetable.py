@@ -89,7 +89,9 @@ def run():
 
                     # Step 1: Parse the timetable string
                     day_blocks = {}
-                    for line in timetable.strip().splitlines():
+                    lines = re.split(r'(?=(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):)', timetable.strip())
+                    lines = [''.join(lines[i:i+2]) for i in range(1, len(lines), 2)]
+                    for line in lines:
                         if ":" in line:
                             day, entries = line.split(":", 1)
                             matches = re.findall(r'(\d{1,2}:\d{2}(?::\d{2})?)=(\d)', entries)
