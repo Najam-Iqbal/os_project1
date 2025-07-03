@@ -69,82 +69,84 @@ def run():
                     st.error("❌ Failed to delete timetable.")
                     update_value("sch_del", False)
 
-        # ----------------------------
-    # 📄 View Current Timetable Section
-    # ----------------------------
+# ----------------------------
+# 📄 View Current Timetable Section
+# ----------------------------
 
-    st.markdown("---")
-    st.subheader("📄 View Current TIMETABLE")
+st.markdown("---")
+st.subheader("📄 View Current Timetable")
 
-    if st.button("📖 Show Current Timetable"):
-        with st.spinner("Loading current timetable..."):
-            try:
-                timetable = get_value("schedule_string")
-                if timetable and len(timetable.strip()) > 0:
-                    st.success("✅ Current Timetable (Parsed View):")
+if st.button("📖 Show Current Timetable"):
+    with st.spinner("Loading current timetable..."):
+        try:
+            timetable = get_value("schedule_string")
+            if timetable and len(timetable.strip()) > 0:
+                st.success("✅ Current Timetable (Parsed View):")
 
-                    # --- PARSE AND FORMAT TIMETABLE STRING ---
-                    import re
-                    from collections import defaultdict
+                import re
+                import pandas as pd
 
-                    # Step 1: Parse the timetable string
-                    day_blocks = {}
-                    lines = re.split(r'(?=(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):)', timetable.strip())
-                    lines = [''.join(lines[i:i+2]) for i in range(1, len(lines), 2)]
-                    for line in lines:
-                        if ":" in line:
-                            day, entries = line.split(":", 1)
-                            matches = re.findall(r'(\d{1,2}:\d{2}(?::\d{2})?)=(\d)', entries)
-                            times = []
-                            for time, state in matches:
-                                try:
-                                    time_fmt = pd.to_datetime(time).strftime('%H:%M:%S')
-                                except:
-                                    time_fmt = time
-                                times.append((time_fmt, int(state)))
-                            day_blocks[day.strip()] = times
+                # Split into lines even if it's single-line
+                lines = re.split(r'(?=(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):)', timetable.strip())
+                lines = [''.join(lines[i:i+2]) for i in range(1, len(lines), 2)]
 
-                    # Step 2: Convert to Start-End ranges
-                    structured = {}
-                    all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-                    for day in all_days:
-                        entries = day_blocks.get(day, [])
-                        ranges = []
-                        current_start = None
-                        for time, state in entries:
-                            if state == 1:
-                                current_start = time
-                            elif state == 0 and current_start:
-                                ranges.append((current_start, time))
-                                current_start = None
-                        if current_start:
-                            ranges.append((current_start, '...'))  # Still ON
-                        structured[day] = ranges
+                day_blocks = {}
+                for line in lines:
+                    if ":" in line:
+                        day, entries = line.split(":", 1)
+                        matches = re.findall(r'(\d{1,2}:\d{2}(?::\d{2})?)=(\d)', entries)
+                        times = []
+                        for time, state in matches:
+                            try:
+                                # Convert to HH:MM only
+                                time_fmt = pd.to_datetime(time).strftime('%H:%M')
+                            except:
+                                time_fmt = time
+                            times.append((time_fmt, int(state)))
+                        day_blocks[day.strip()] = times
 
-                    # Step 3: Normalize all rows
-                    max_len = max(len(v) for v in structured.values())
-                    for day in structured:
-                        while len(structured[day]) < max_len:
-                            structured[day].append(('', ''))
+                # Build start-end pairs
+                all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                structured = {}
+                for day in all_days:
+                    entries = day_blocks.get(day, [])
+                    ranges = []
+                    current_start = None
+                    for time, state in entries:
+                        if state == 1:
+                            current_start = time
+                        elif state == 0 and current_start:
+                            ranges.append((current_start, time))
+                            current_start = None
+                    if current_start:
+                        ranges.append((current_start, '...'))
+                    structured[day] = ranges
 
-                    # Step 4: Create DataFrame
-                    rows = []
-                    for day, pairs in structured.items():
-                        flat = []
-                        for s, e in pairs:
-                            flat.extend([s, e])
-                        rows.append([day] + flat)
+                # Normalize row lengths
+                max_len = max(len(v) for v in structured.values())
+                for day in structured:
+                    while len(structured[day]) < max_len:
+                        structured[day].append(('', ''))
 
-                    columns = ["Day"]
-                    for i in range(1, max_len + 1):
-                        columns += [f"Start {i}", f"End {i}"]
+                # Create table
+                rows = []
+                for day, pairs in structured.items():
+                    flat = []
+                    for s, e in pairs:
+                        flat.extend([s, e])
+                    rows.append([day] + flat)
 
-                    df = pd.DataFrame(rows, columns=columns)
+                # Column headers
+                columns = ["Day"]
+                for i in range(1, max_len + 1):
+                    columns += [f"Start {i}", f"End {i}"]
 
-                    # Step 5: Display in Streamlit
-                    st.dataframe(df, use_container_width=True)
+                df = pd.DataFrame(rows, columns=columns)
 
-                else:
-                    st.warning("⚠️ No timetable currently stored.")
-            except Exception as e:
-                st.error(f"❌ Failed to fetch timetable: {str(e)}")
+                st.dataframe(df, use_container_width=True)
+
+            else:
+                st.warning("⚠️ No timetable currently stored.")
+        except Exception as e:
+            st.error(f"❌ Failed to fetch timetable: {str(e)}")
+
