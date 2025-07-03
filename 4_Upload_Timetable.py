@@ -75,7 +75,7 @@ def run():
     # ----------------------------
 
     st.markdown("---")
-    st.subheader("📄 View Current TimeTable")
+    st.subheader("📄 View Current Timetable")
 
     if st.button("📖 Show Current Timetable"):
      with st.spinner("Loading current timetable..."):
@@ -87,10 +87,15 @@ def run():
                 import re
                 import pandas as pd
 
-                # 🔍 Handle both single-line and multiline format
+                # Step 1: Split into per-day entries
                 lines = re.split(r'(?=(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):)', timetable.strip())
                 lines = [''.join(lines[i:i+2]) for i in range(1, len(lines), 2)]
 
+                # Debug: Show lines extracted
+                st.write("📄 Parsed Lines from Firebase:")
+                st.write(lines)
+
+                # Step 2: Parse each day
                 day_blocks = {}
                 for line in lines:
                     if ":" in line:
@@ -99,13 +104,17 @@ def run():
                         times = []
                         for time, state in matches:
                             try:
-                                time_fmt = pd.to_datetime(time).strftime('%H:%M')  # 🕑 Drop seconds
+                                time_fmt = pd.to_datetime(time).strftime('%H:%M')  # Remove seconds
                             except:
                                 time_fmt = time
                             times.append((time_fmt, int(state)))
                         day_blocks[day.strip()] = times
 
-                # 🧠 Convert state sequences into (start, end) intervals
+                # Debug: Show parsed ON/OFF times
+                st.write("🔍 Parsed ON/OFF States:")
+                st.write(day_blocks)
+
+                # Step 3: Convert ON/OFF pairs to start-end intervals
                 structured = {}
                 all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
                 for day in all_days:
@@ -119,16 +128,19 @@ def run():
                             ranges.append((current_start, time))
                             current_start = None
                     if current_start:
-                        ranges.append((current_start, '...'))  # still running
+                        ranges.append((current_start, '...'))  # Still ON
                     structured[day] = ranges
 
-                # 🔄 Normalize row length
-                max_len = max(len(v) for v in structured.values())
+                # Debug: Show structured start-end pairs
+                st.write("✅ Start-End Pairs:")
+                st.write(structured)
+
+                # Step 4: Normalize to make a proper table
+                max_len = max(len(pairs) for pairs in structured.values())
                 for day in structured:
                     while len(structured[day]) < max_len:
                         structured[day].append(('', ''))
 
-                # 🧱 Create rows for DataFrame
                 rows = []
                 for day, pairs in structured.items():
                     flat = []
@@ -136,21 +148,20 @@ def run():
                         flat.extend([s, e])
                     rows.append([day] + flat)
 
-                # 🏷️ Column names
                 columns = ["Day"]
                 for i in range(1, max_len + 1):
                     columns += [f"Start {i}", f"End {i}"]
 
-                # 🧾 Final DataFrame
                 df = pd.DataFrame(rows, columns=columns)
 
-                # ✅ Display Table
+                st.subheader("📊 Weekly Schedule Table")
                 st.dataframe(df, use_container_width=True)
 
             else:
                 st.warning("⚠️ No timetable currently stored.")
         except Exception as e:
             st.error(f"❌ Failed to fetch timetable: {str(e)}")
+
 
 
 
