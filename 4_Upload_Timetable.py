@@ -56,7 +56,7 @@ def run():
     # ----------------------------
 
     st.markdown("---")
-    st.subheader("🗑️ Delete Timetable")
+    st.subheader("🗑️ Delete TimeTable")
 
     if st.checkbox("⚠️ I confirm I want to delete the current timetable."):
         if st.button("Delete Timetable"):
