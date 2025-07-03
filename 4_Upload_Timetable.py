@@ -1,4 +1,5 @@
 import streamlit as st
+import re
 import os
 import time
 import pandas as pd
@@ -83,8 +84,7 @@ if st.button("📖 Show Current Timetable"):
             if timetable and len(timetable.strip()) > 0:
                 st.success("✅ Current Timetable (Parsed View):")
 
-                import re
-                import pandas as pd
+                
 
                 # Split into lines even if it's single-line
                 lines = re.split(r'(?=(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):)', timetable.strip())
