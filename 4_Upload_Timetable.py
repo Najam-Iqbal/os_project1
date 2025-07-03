@@ -69,7 +69,7 @@ def run():
                     st.error("❌ Failed to delete timetable.")
                     update_value("sch_del", False)
 
-    # ----------------------------
+        # ----------------------------
     # 📄 View Current Timetable Section
     # ----------------------------
 
@@ -81,8 +81,67 @@ def run():
             try:
                 timetable = get_value("schedule_string")
                 if timetable and len(timetable.strip()) > 0:
-                    st.success("✅ Current Timetable:")
-                    st.text_area("🕒 Timetable Contents", timetable, height=300)
+                    st.success("✅ Current Timetable (Parsed View):")
+
+                    # --- PARSE AND FORMAT TIMETABLE STRING ---
+                    import re
+                    from collections import defaultdict
+
+                    # Step 1: Parse the timetable string
+                    day_blocks = {}
+                    for line in timetable.strip().splitlines():
+                        if ":" in line:
+                            day, entries = line.split(":", 1)
+                            matches = re.findall(r'(\d{1,2}:\d{2}(?::\d{2})?)=(\d)', entries)
+                            times = []
+                            for time, state in matches:
+                                try:
+                                    time_fmt = pd.to_datetime(time).strftime('%H:%M:%S')
+                                except:
+                                    time_fmt = time
+                                times.append((time_fmt, int(state)))
+                            day_blocks[day.strip()] = times
+
+                    # Step 2: Convert to Start-End ranges
+                    structured = {}
+                    all_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                    for day in all_days:
+                        entries = day_blocks.get(day, [])
+                        ranges = []
+                        current_start = None
+                        for time, state in entries:
+                            if state == 1:
+                                current_start = time
+                            elif state == 0 and current_start:
+                                ranges.append((current_start, time))
+                                current_start = None
+                        if current_start:
+                            ranges.append((current_start, '...'))  # Still ON
+                        structured[day] = ranges
+
+                    # Step 3: Normalize all rows
+                    max_len = max(len(v) for v in structured.values())
+                    for day in structured:
+                        while len(structured[day]) < max_len:
+                            structured[day].append(('', ''))
+
+                    # Step 4: Create DataFrame
+                    rows = []
+                    for day, pairs in structured.items():
+                        flat = []
+                        for s, e in pairs:
+                            flat.extend([s, e])
+                        rows.append([day] + flat)
+
+                    columns = ["Day"]
+                    for i in range(1, max_len + 1):
+                        columns += [f"Start {i}", f"End {i}"]
+
+                    df = pd.DataFrame(rows, columns=columns)
+
+                    # Step 5: Display in Streamlit
+                    st.dataframe(df, use_container_width=True)
+
                 else:
                     st.warning("⚠️ No timetable currently stored.")
             except Exception as e:
