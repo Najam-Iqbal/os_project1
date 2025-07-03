@@ -146,7 +146,8 @@ def run():
                 def style_row(row):
                     base_style = []
                     if row['Day'] == today_name:
-                        base_style = ['background-color: #d0f0fd'] * len(row)
+                        base_style = ['background-color: #2c3e50; color: white'] * len(row)
+
                     else:
                         base_style = [''] * len(row)
 
