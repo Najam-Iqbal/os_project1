@@ -70,21 +70,22 @@ def run():
                     st.error("❌ Failed to delete timetable.")
                     update_value("sch_del", False)
 
-# ----------------------------
-# 📄 View Current Timetable Section
-# ----------------------------
+    # ----------------------------
+    # 📄 View Current Timetable Section
+    # ----------------------------
 
-st.markdown("---")
-st.subheader("📄 View Current Timetable")
+    st.markdown("---")
+    st.subheader("📄 View Current Timetable")
 
-if st.button("📖 Show Current Timetable"):
-    with st.spinner("Loading current timetable..."):
+    if st.button("📖 Show Current Timetable"):
+     with st.spinner("Loading current timetable..."):
         try:
             timetable = get_value("schedule_string")
             if timetable and len(timetable.strip()) > 0:
                 st.success("✅ Current Timetable (Parsed View):")
 
-                
+                import re
+                import pandas as pd
 
                 # Split into lines even if it's single-line
                 lines = re.split(r'(?=(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday):)', timetable.strip())
@@ -149,4 +150,5 @@ if st.button("📖 Show Current Timetable"):
                 st.warning("⚠️ No timetable currently stored.")
         except Exception as e:
             st.error(f"❌ Failed to fetch timetable: {str(e)}")
+
 
