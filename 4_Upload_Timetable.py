@@ -85,7 +85,6 @@ def run():
                 st.success("✅ Current Timetable (Parsed View):")
 
                 import re
-                import pandas as pd
                 from datetime import datetime
 
                 # ✅ Step 1: Parse the timetable
@@ -96,11 +95,11 @@ def run():
                 for day, data in matches:
                     entries = re.findall(r'(\d{1,2}:\d{2}(?::\d{2})?)=(\d)', data)
                     times = []
-                    for time, state in entries:
+                    for time_str, state in entries:
                         try:
-                            time_fmt = pd.to_datetime(time).strftime('%H:%M')
+                            time_fmt = pd.to_datetime(time_str).strftime('%H:%M')
                         except:
-                            time_fmt = time
+                            time_fmt = time_str
                         times.append((time_fmt, int(state)))
                     day_blocks[day] = times
 
@@ -111,11 +110,11 @@ def run():
                     entries = day_blocks.get(day, [])
                     ranges = []
                     current_start = None
-                    for time, state in entries:
+                    for time_str, state in entries:
                         if state == 1:
-                            current_start = time
+                            current_start = time_str
                         elif state == 0 and current_start:
-                            ranges.append((current_start, time))
+                            ranges.append((current_start, time_str))
                             current_start = None
                     if current_start:
                         ranges.append((current_start, '...'))
@@ -147,7 +146,6 @@ def run():
                     base_style = []
                     if row['Day'] == today_name:
                         base_style = ['background-color: #2c3e50'] * len(row)
-
                     else:
                         base_style = [''] * len(row)
 
@@ -169,9 +167,3 @@ def run():
                 st.warning("⚠️ No timetable currently stored.")
         except Exception as e:
             st.error(f"❌ Failed to fetch timetable: {str(e)}")
-
-
-
-
-
-
