@@ -74,7 +74,7 @@ def run():
     # ----------------------------
 
     st.markdown("---")
-    st.subheader("📄 View Current Timetable")
+    st.subheader("📄 View Current TIMETABLE")
 
     if st.button("📖 Show Current Timetable"):
         with st.spinner("Loading current timetable..."):
