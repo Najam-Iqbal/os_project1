@@ -27,9 +27,9 @@ def excel_to_timetable_string(file_path):
                                     time_str = str(row[col]).strip()
                                 day_schedule.append(f"{time_str}={marker}")
                 else:
-                    day_schedule.append("01:00=0")
+                    day_schedule.append("")
             else:
-                day_schedule.append("01:00=0")
+                day_schedule.append("")
             
             output.append(f"{day}: {', '.join(day_schedule)}")
         
