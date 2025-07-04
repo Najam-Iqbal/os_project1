@@ -79,7 +79,7 @@ def run():
             st.rerun()
         else:
             if not st.session_state.upload_failed: 
-            st.info("✅ File already uploaded. No changes detected.")
+             st.info("✅ File already uploaded. No changes detected.")
 
     # Show retry button if last upload failed
     if st.session_state.upload_failed and uploaded:
