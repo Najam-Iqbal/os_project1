@@ -7,7 +7,7 @@ from firebase_utils import update_value, get_value, get_power_status, check_wifi
 from timetable_parser import excel_to_timetable_string
 
 def run():
-    st.title("📅 Upload Timetable")
+    st.title("📅 Timetable Controls")
 
     st.info("⚠️ Strictly follow the given format before uploading timetable. USE 24 HOURS FORMAT")
 
