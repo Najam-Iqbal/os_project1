@@ -23,39 +23,42 @@ def run():
     # Upload
     uploaded = st.file_uploader("📤 Upload your Timetable Excel file", type=["xlsx"])
     
-    if uploaded:
-        excel_path = "temp_uploaded.xlsx"
-        with open(excel_path, "wb") as f:
-            f.write(uploaded.read())
+ if uploaded and not st.session_state.file_processed:
+    st.session_state.file_processed = True  # Mark as processed
 
-        output = excel_to_timetable_string(excel_path)
-        required_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        
-        if "Error" not in output and all(day in output for day in required_days):
-            if check_wifi():
-                with st.spinner('Processing...'): 
-                    temp_str=get_value("schedule_string")
-                    update_value("schedule_string", output)
-                    update_value("sch_update", True)
-                    time.sleep(8)
-                    if get_value("sch_update") == False:
-                        st.success("✅ Timetable uploaded successfully!")
-                    else:
-                        st.error("❌ Failed to upload timetable on Device.")
-                        update_value("sch_update", False)
-                        update_value("schedule_string", temp_str)
-            else:
-                st.error("Device is not connected to Wi-Fi.")
-                update_value("sch_update", False)
+    excel_path = "temp_uploaded.xlsx"
+    with open(excel_path, "wb") as f:
+        f.write(uploaded.read())
+
+    output = excel_to_timetable_string(excel_path)
+    required_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+    if "Error" not in output and all(day in output for day in required_days):
+        if check_wifi():
+            with st.spinner('Processing...'): 
+                temp_str = get_value("schedule_string")
+                update_value("schedule_string", output)
+                update_value("sch_update", True)
+                time.sleep(8)
+                if get_value("sch_update") == False:
+                    st.success("✅ Timetable uploaded successfully!")
+                else:
+                    st.error("❌ Failed to upload timetable on Device.")
+                    update_value("sch_update", False)
+                    update_value("schedule_string", temp_str)
         else:
-            st.error("❌ Incorrect timetable format. Make sure all days are included.")
+            st.error("Device is not connected to Wi-Fi.")
             update_value("sch_update", False)
+    else:
+        st.error("❌ Incorrect timetable format. Make sure all days are included.")
+        update_value("sch_update", False)
 
-        if os.path.exists(excel_path):
-            os.remove(excel_path)    
-        
-        time.sleep(2)
-        st.rerun()
+    if os.path.exists(excel_path):
+        os.remove(excel_path)
+
+    # Force a reset after 2s
+    time.sleep(2)
+    st.rerun()
         
 
     # ----------------------------
