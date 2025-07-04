@@ -5,16 +5,6 @@ import time
 def run():
     st.title("🟢 Manual Power Control")
 
-    """# Check WiFi connection by polling /Device_001/wifi_status
-    current_status = get_value("Device_001/wifi_status")
-    time.sleep(6)
-    updated_status = get_value("Device_001/wifi_status")
-
-    if current_status == updated_status:
-        st.error("Device is not connected to WiFi.")
-        st.stop()"""
-
-
     # Manual mode control UI
     mode = st.radio("Select Manual Control Mode", ["Use Manual Control", "Exit Manual Control"], key="manual_mode")
 
