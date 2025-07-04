@@ -5,7 +5,7 @@ import importlib
 import time
 
 PAGES = {
-    "LED Control": "2_Manual_Control",
+    "POWER Control": "2_Manual_Control",
     "WiFi & Credentials": "1_Change_Credentials",
     "Restart/Deep-Sleep": "3_DeepSleep_and_Restart",
     "Timetable Controls": "4_Upload_Timetable"
