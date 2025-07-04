@@ -85,7 +85,7 @@ def run():
         try:
             timetable = get_value("schedule_string")
             if timetable and len(timetable.strip()) > 0:
-                st.success("✅ Current Timetable (Parsed View):")
+                st.success("✅ Current Timetable:")
 
                 import re
                 from datetime import datetime
