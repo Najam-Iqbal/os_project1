@@ -23,17 +23,17 @@ def run():
     # Upload
     uploaded = st.file_uploader("📤 Upload your Timetable Excel file", type=["xlsx"])
     
- if uploaded and not st.session_state.file_processed:
-    st.session_state.file_processed = True  # Mark as processed
+    if uploaded and not st.session_state.file_processed:
+     st.session_state.file_processed = True  # Mark as processed
 
-    excel_path = "temp_uploaded.xlsx"
-    with open(excel_path, "wb") as f:
+     excel_path = "temp_uploaded.xlsx"
+     with open(excel_path, "wb") as f:
         f.write(uploaded.read())
 
-    output = excel_to_timetable_string(excel_path)
-    required_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+     output = excel_to_timetable_string(excel_path)
+     required_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
-    if "Error" not in output and all(day in output for day in required_days):
+     if "Error" not in output and all(day in output for day in required_days):
         if check_wifi():
             with st.spinner('Processing...'): 
                 temp_str = get_value("schedule_string")
@@ -49,16 +49,16 @@ def run():
         else:
             st.error("Device is not connected to Wi-Fi.")
             update_value("sch_update", False)
-    else:
+     else:
         st.error("❌ Incorrect timetable format. Make sure all days are included.")
         update_value("sch_update", False)
 
-    if os.path.exists(excel_path):
+     if os.path.exists(excel_path):
         os.remove(excel_path)
 
-    # Force a reset after 2s
-    time.sleep(2)
-    st.rerun()
+     # Force a reset after 2s
+     time.sleep(2)
+     st.rerun()
         
 
     # ----------------------------
