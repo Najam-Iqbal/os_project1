@@ -103,6 +103,8 @@ def run():
                 if get_value("sch_del") == False:
                     update_value("schedule_string", "")
                     st.success("✅ Timetable deleted successfully!")
+                    st.session_state.upload_failed = False
+
                 else:
                     st.error("❌ Failed to delete timetable.")
                     update_value("sch_del", False)
