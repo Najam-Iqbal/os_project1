@@ -7,8 +7,8 @@ import time
 PAGES = {
     "LED Control": "2_Manual_Control",
     "WiFi & Credentials": "1_Change_Credentials",
-    "Deep Sleep": "3_DeepSleep_and_Restart",
-    "Upload Timetable": "4_Upload_Timetable"
+    "Restart/Deep-Sleep": "3_DeepSleep_and_Restart",
+    "Timetable Controls": "4_Upload_Timetable"
 }
 
 
