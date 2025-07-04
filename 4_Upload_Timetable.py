@@ -33,15 +33,17 @@ def run():
         
         if "Error" not in output and all(day in output for day in required_days):
             if check_wifi():
-                with st.spinner('Processing...'):   
+                with st.spinner('Processing...'): 
+                    temp_str=get_value("schedule_string")
                     update_value("schedule_string", output)
                     update_value("sch_update", True)
                     time.sleep(5)
                     if get_value("sch_update") == False:
                         st.success("✅ Timetable uploaded successfully!")
                     else:
-                        st.error("❌ Failed to upload timetable to Firebase.")
+                        st.error("❌ Failed to upload timetable on Device.")
                         update_value("sch_update", False)
+                        update_value("schedule_string", temp_str)
             else:
                 st.error("Device is not connected to Wi-Fi.")
                 update_value("sch_update", False)
@@ -64,7 +66,8 @@ def run():
             with st.spinner("Deleting timetable..."):
                 update_value("sch_del", True)
                 time.sleep(5)
-                if get_value("sch_del") == False:
+                if get_value("sch_del") == False
+                    update_value("schedule_string", "")
                     st.success("✅ Timetable deleted successfully!")
                 else:
                     st.error("❌ Failed to delete timetable.")
