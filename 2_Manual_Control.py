@@ -3,7 +3,7 @@ from firebase_utils import update_value, get_value, get_power_status,check_wifi
 import time
 
 def run():
-    st.title("🟢 Manual LED Control")
+    st.title("🟢 Manual Power Control")
 
     """# Check WiFi connection by polling /Device_001/wifi_status
     current_status = get_value("Device_001/wifi_status")
