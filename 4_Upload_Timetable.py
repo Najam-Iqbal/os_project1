@@ -50,12 +50,12 @@ def run():
         else:
             st.error("❌ Incorrect timetable format. Make sure all days are included.")
             update_value("sch_update", False)
-        time.sleep(2)
-        st.rerun
+
         if os.path.exists(excel_path):
             os.remove(excel_path)    
-
-
+        
+        time.sleep(2)
+        st.rerun()
         
 
     # ----------------------------
