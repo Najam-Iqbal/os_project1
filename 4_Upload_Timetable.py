@@ -66,7 +66,7 @@ def run():
             with st.spinner("Deleting timetable..."):
                 update_value("sch_del", True)
                 time.sleep(5)
-                if get_value("sch_del") == False
+                if get_value("sch_del") == False :
                     update_value("schedule_string", "")
                     st.success("✅ Timetable deleted successfully!")
                 else:
