@@ -30,7 +30,7 @@ def login():
 def main():
     if 'logged_in' not in st.session_state or not st.session_state.logged_in:
         login()
-       # st.stop()
+        st.stop()
     st.sidebar.title("ESP32 Firebase Dashboard")
     # Add a unique key to the radio button to prevent ID conflict
     selection = st.sidebar.radio("Select Page", list(PAGES.keys()), key="page_selection_radio")
