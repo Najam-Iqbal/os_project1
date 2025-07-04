@@ -32,6 +32,8 @@ def run():
 
     # Upload file
     uploaded = st.file_uploader("📤 Upload your Timetable Excel file", type=["xlsx"])
+    if uploaded is None:
+        st.session_state.last_uploaded_hash = None
 
     if uploaded:
         current_hash = get_file_hash(uploaded)
