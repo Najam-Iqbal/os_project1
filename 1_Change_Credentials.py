@@ -11,10 +11,10 @@ def run():
       new_user = st.text_input("New Device name")
       new_pass = st.text_input("New Device Password (8-15 characters)", type="password")
       if st.button("Apply Changes", key="cred_change"):
+        if new_user and new_pass:
          if 8<= len(new_pass):
           with st.spinner('🔄 Updating...'):
            if check_wifi():   
-            if new_user and new_pass:
                 update_value("Esp32_configure/DeviceName", new_user)
                 update_value("Esp32_configure/Password", new_pass)
                 update_value("Esp32_configure/chg", True)
@@ -25,12 +25,12 @@ def run():
                 else:
                     st.error("Error updating credentials.")
                     update_value("Esp32_configure/chg", False)
-            else:
-                st.warning("Both fields are required.")
            else:
                 st.error("Device is not connected to wifi.")
          else:
               st.error("Password must be between 8-15 characters")
+        else:
+            st.warning("Both fields are required.")
     elif option == "Change WiFi":
         ssid = st.text_input("New WiFi SSID")
         wifi_pass = st.text_input("New WiFi Password", type="password")
