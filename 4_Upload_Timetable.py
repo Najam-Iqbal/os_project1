@@ -9,6 +9,11 @@ from timetable_parser import excel_to_timetable_string
 def run():
     st.title("📅 Upload Timetable")
 
+    # 🔁 Initialize session flag
+    if "file_processed" not in st.session_state:
+        st.session_state.file_processed = False
+
+
     st.info("⚠️ Strictly follow the given format before uploading timetable. USE 24 HOURS FORMAT")
 
     # Sample XLSX download link
