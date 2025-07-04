@@ -5,22 +5,12 @@ import time
 def run():
     st.title("🔐 Change Device Credentials / WiFi")
 
-    """# WiFi Connectivity Check
-    current_status = get_value("Device_001/wifi_status")
-    time.sleep(6)
-    updated_status = get_value("Device_001/wifi_status")
-
-    if current_status == updated_status:
-        st.error("Device is not connected to WiFi.")
-        st.stop()"""
-
-    # Main page starts here
     option = st.radio("Select what you want to change:", ["Change Device name & Password", "Change WiFi"], key="change_option")
 
     if option == "Change Device name & Password":
-        new_user = st.text_input("New Device name")
-        new_pass = st.text_input("New Device Password (8-15 characters)", type="password")
-        if st.button("Apply Changes", key="cred_change"):
+      new_user = st.text_input("New Device name")
+      new_pass = st.text_input("New Device Password (8-15 characters)", type="password")
+      if st.button("Apply Changes", key="cred_change"):
          if 8<= len(new_pass):
           with st.spinner('🔄 Updating...'):
            if check_wifi():   
