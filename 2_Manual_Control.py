@@ -23,7 +23,7 @@ def run():
          else:
             st.error("Device is not connected to WiFi.")
       else:
-        
+         st.info("Manual control session is already running. If you want to enter new one, exit the manual control first.")
     elif mode == "Exit Manual Control":
         if st.button("Exit Manual Control", key="exit_manual"):
           if check_wifi():  
