@@ -105,7 +105,10 @@ def run():
         if st.button("Delete Timetable"):
             with st.spinner("Deleting timetable..."):
                 update_value("sch_del", True)
-                time.sleep(8)
+                ct=0
+                while get_value("sch_del") and ct<=6
+                 time.sleep(2)
+                 ct+=1
                 if get_value("sch_del") == False:
                     update_value("schedule_string", "")
                     st.success("✅ Timetable deleted successfully!")
