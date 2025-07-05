@@ -33,10 +33,10 @@ def show_power_status():
                 st.info(f"{st.session_state.power_result}_ Following Timetable")
             else:
                if get_value("led/manualcontrol"): 
-                st.Warning(f"{st.session_state.power_result}_ Manual Control Till {get_value("fr_end/noted_time")}")
+                st.warning(f"{st.session_state.power_result}_ Manual Control Till {get_value("fr_end/noted_time")}")
                elif get_value("schedule_string") != "":
-                st.Warning(f"{st.session_state.power_result}_ Following Timetable")
+                st.warning(f"{st.session_state.power_result}_ Following Timetable")
                else:
-                st.Warning(st.session_state.power_result)
+                st.warning(st.session_state.power_result)
         else:
             st.session_state.show_power = False  # Hide after 3 seconds
