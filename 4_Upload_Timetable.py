@@ -106,7 +106,7 @@ def run():
             with st.spinner("Deleting timetable..."):
                 update_value("sch_del", True)
                 ct=0
-                while get_value("sch_del") and ct<=6
+                while get_value("sch_del") and ct<=6:
                  time.sleep(2)
                  ct+=1
                 if get_value("sch_del") == False:
