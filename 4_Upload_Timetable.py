@@ -57,7 +57,7 @@ def run():
                         update_value("schedule_string", output)
                         update_value("sch_update", True)
                         ct=0
-                        while get_value("sch_update") and ct <= 10:
+                        while get_value("sch_update") and ct <= 6:
                          time.sleep(2)
                          ct+=1
                          
