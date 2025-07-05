@@ -1,7 +1,7 @@
 from streamlit_autorefresh import st_autorefresh
 import streamlit as st
 import time
-from firebase_utils import get_power_status, check_wifi
+from firebase_utils import get_power_status, check_wifi, get_value
 
 def show_power_status():
     # Auto-refresh every second if needed
@@ -16,6 +16,7 @@ def show_power_status():
     if st.button("🔍 View Current Power Status"):
        if check_wifi(): 
         power_on = get_power_status()
+        if get_value("led/manualcontrol")
         st.session_state.power_result = "🔌 Power Status: ON (Click again to get current status)" if power_on else "⚡ Power Status: OFF (Click again to get current status)"
         st.session_state.show_power = True
         st.session_state.power_checked_at = time.time()
