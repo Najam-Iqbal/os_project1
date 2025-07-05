@@ -25,7 +25,7 @@ def run():
             tz=pytz.timezone('Asia/Karachi')
             now=datetime.now(tz)
             noted=now + timedelta(minutes=delay_min)
-            update_value("fr_end/noted_time")
+            update_value("fr_end/noted_time", noted.strftime("%H:%T"))
             time.sleep(2)
             st.rerun()
          else:
