@@ -29,14 +29,12 @@ def show_power_status():
             if "ON" in st.session_state.power_result:
                if get_value("led/manualcontrol"): 
                 st.info(f"{st.session_state.power_result}_ Manual Control Till {get_value("fr_end/noted_time")}")
-               elif get_value(schedule_string) != "":
+               elif get_value("schedule_string") != "":
                 st.info(f"{st.session_state.power_result}_ Following Timetable")
-               else:
-                st.info(st.session_state.power_result)
             else:
                if get_value("led/manualcontrol"): 
                 st.Warning(f"{st.session_state.power_result}_ Manual Control Till {get_value("fr_end/noted_time")}")
-               elif get_value(schedule_string) != "":
+               elif get_value("schedule_string") != "":
                 st.Warning(f"{st.session_state.power_result}_ Following Timetable")
                else:
                 st.Warning(st.session_state.power_result)
