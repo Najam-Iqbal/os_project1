@@ -56,8 +56,12 @@ def run():
                         temp_str = get_value("schedule_string")
                         update_value("schedule_string", output)
                         update_value("sch_update", True)
-                        time.sleep(8)
-                        if get_value("sch_update") == False:
+                        ct=0
+                        while get_value("sch_update") and ct <= 10:
+                         time.sleep(2)
+                         ct+=1
+                         
+                        if not get_value("sch_update"):
                             st.success("✅ Timetable uploaded successfully!")
                             st.session_state.upload_failed = False
                         else:
