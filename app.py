@@ -8,7 +8,8 @@ PAGES = {
     "POWER Control": "2_Manual_Control",
     "WiFi & Credentials": "1_Change_Credentials",
     "Restart/Deep-Sleep": "3_DeepSleep_and_Restart",
-    "Timetable Controls": "4_Upload_Timetable"
+    "Timetable Controls": "4_Upload_Timetable",
+    "Device is Offline?": "offline_instructions"
 }
 
 
