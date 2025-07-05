@@ -16,7 +16,6 @@ def show_power_status():
     if st.button("🔍 View Current Power Status"):
        if check_wifi(): 
         power_on = get_power_status()
-        if get_value("led/manualcontrol")
         st.session_state.power_result = "🔌 Power Status: ON (Click again to get current status)" if power_on else "⚡ Power Status: OFF (Click again to get current status)"
         st.session_state.show_power = True
         st.session_state.power_checked_at = time.time()
