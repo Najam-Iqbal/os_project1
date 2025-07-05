@@ -1,6 +1,7 @@
 import streamlit as st
 from firebase_utils import update_value, get_value, get_power_status,check_wifi
 import time
+import pytz
 
 def run():
     st.title("🟢 Manual Power Control")
@@ -20,6 +21,10 @@ def run():
             update_value("led/mn_st", 1 if led_state == "on" else 0)
             time.sleep(3)
             st.success("Manual control command sent.")
+            tz=pytz.timezone('Asia/Karachi')
+            now=datetime.now(tz)
+            noted=now + timedelta(minutes=delay_min)
+            update_value("fr_end/noted_time")
             time.sleep(2)
             st.rerun()
          else:
