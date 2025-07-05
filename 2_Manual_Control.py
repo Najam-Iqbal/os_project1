@@ -20,10 +20,13 @@ def run():
             update_value("led/mn_st", 1 if led_state == "on" else 0)
             time.sleep(3)
             st.success("Manual control command sent.")
+            time.sleep(2)
+            st.rerun()
          else:
             st.error("Device is not connected to WiFi.")
       else:
          st.info("Manual control session is already running. If you want to enter new one, exit the manual control first.")
+         
     elif mode == "Exit Manual Control":
         if st.button("Exit Manual Control", key="exit_manual"):
           if check_wifi():  
