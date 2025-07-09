@@ -5,15 +5,6 @@ import time
 def run():
     st.title("🌙 Deep Sleep and Restart")
 
-    # Wi-Fi connection check
-    """current_status = get_value("Device_001/wifi_status")
-    time.sleep(6)
-    updated_status = get_value("Device_001/wifi_status")
-
-    if current_status == updated_status:
-        st.error("Device is not connected to WiFi.")
-        st.stop()"""
-
     # Deep sleep state tracking
     ds_time_key = "deep_sleep_minutes"
     if ds_time_key not in st.session_state:
@@ -44,6 +35,7 @@ def run():
 
     # Restart device
     if st.button("Restart ESP32"):
+      update_value("user_presence", True)
       if check_wifi():
         update_value("restart", True)
         st.success("Restart signal sent to device. After deep sleep, device will follow the Schedule")
