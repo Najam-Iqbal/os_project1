@@ -40,6 +40,7 @@ def run():
 
         if current_hash != st.session_state.last_uploaded_hash:
             # New or modified file
+            update_value("user_presence", True)
             st.session_state.last_uploaded_hash = current_hash
             st.session_state.upload_failed = False
 
@@ -103,6 +104,7 @@ def run():
 
     if st.checkbox("⚠️ I confirm I want to delete the current timetable."):
         if st.button("Delete Timetable"):
+            update_value("user_presence", True)
             with st.spinner("Deleting timetable..."):
                 update_value("sch_del", True)
                 ct=0
@@ -126,6 +128,7 @@ def run():
     st.subheader("📄 View Current TimeTable")
 
     if st.button("📖 Show Current Timetable"):
+        update_value("user_presence", True)
         with st.spinner("Loading current timetable..."):
             try:
                 timetable = get_value("schedule_string")
