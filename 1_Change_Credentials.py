@@ -11,6 +11,7 @@ def run():
       new_user = st.text_input("New Device name")
       new_pass = st.text_input("New Device Password (8-15 characters)", type="password")
       if st.button("Apply Changes", key="cred_change"):
+        update_value("user_presence", True)
         if new_user and new_pass:
          if 8<= len(new_pass):
           with st.spinner('🔄 Updating...'):
@@ -35,6 +36,7 @@ def run():
         ssid = st.text_input("New WiFi SSID")
         wifi_pass = st.text_input("New WiFi Password", type="password")
         if st.button("Apply Changes", key="wifi_change"):
+         update_value("user_presence", True)
          if ssid and wifi_pass:
             update_value("Wifi_configure/SSID", ssid)
             update_value("Wifi_configure/Password", wifi_pass)
