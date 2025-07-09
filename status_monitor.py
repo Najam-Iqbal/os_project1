@@ -14,6 +14,7 @@ def show_power_status():
         st.session_state.power_result = ""
 
     if st.button("🔍 View Current Power Status"):
+       update_value("user_presence", True)
        if check_wifi(): 
         power_on = get_power_status()
         st.session_state.power_result = "🔌 Power Status: ON (Click again to get current status)" if power_on else "⚡ Power Status: OFF (Click again to get current status)"
