@@ -15,6 +15,7 @@ def run():
         delay_min = st.number_input("Enter time in minutes:", min_value=1, step=1)
         led_state = st.selectbox("Turn:", ["on", "off"], key="led_state_choice")
         if st.button("Submit Manual Command"):
+         update_value("user_presence", True)
          if check_wifi(): 
            with st.spinner('Sending command...'):
             update_value("led/delay", delay_min)
@@ -35,6 +36,7 @@ def run():
          
     elif mode == "Exit Manual Control":
         if st.button("Exit Manual Control", key="exit_manual"):
+          update_value("user_presence", True)
           if check_wifi():  
            with st.spinner('🔄 Exiting...'): 
             update_value("led/manualcontrol", False)
