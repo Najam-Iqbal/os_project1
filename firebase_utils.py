@@ -41,6 +41,7 @@ def check_wifi_status():
         st.session_state.wifi_check_time = None
 
     if st.button("📶 Check WiFi Status"):
+        update_value("user_presence", True)
         # Begin checking process
         st.session_state.wifi_check_started = True
         st.session_state.wifi_check_time = time.time()
