@@ -23,6 +23,7 @@ def login():
     if login_clicked:
         if validate_login(device_name, password):
             st.session_state.logged_in = True
+            update_value("user_presence", True)
             st.rerun()
 
         else:
