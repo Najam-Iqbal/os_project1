@@ -1,7 +1,7 @@
 from streamlit_autorefresh import st_autorefresh
 import streamlit as st
 import time
-from firebase_utils import get_power_status, check_wifi, get_value
+from firebase_utils import get_power_status, check_wifi, get_value,update_value
 
 def show_power_status():
     # Auto-refresh every second if needed
